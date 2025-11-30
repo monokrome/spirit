@@ -4,8 +4,32 @@ use std::f64::consts::PI;
 use std::fs;
 use std::path::PathBuf;
 
-const SAMPLE_RATE: u32 = 44100;
+const DEFAULT_SAMPLE_RATE: u32 = 44100;
+const DEFAULT_BIT_DEPTH: u16 = 16;
 const AMPLITUDE: f64 = 0.8;
+
+/// Audio configuration passed through the application
+#[derive(Clone, Copy)]
+struct AudioConfig {
+    sample_rate: u32,
+    bit_depth: u16,
+}
+
+impl Default for AudioConfig {
+    fn default() -> Self {
+        Self {
+            sample_rate: DEFAULT_SAMPLE_RATE,
+            bit_depth: DEFAULT_BIT_DEPTH,
+        }
+    }
+}
+
+/// Audio generator that holds configuration and provides all generation methods
+struct AudioGenerator {
+    config: AudioConfig,
+    pub output_dir: PathBuf,
+    pub duration: f64,
+}
 
 // =============================================================================
 // FREQUENCY DATABASES
@@ -1179,1478 +1203,1540 @@ const NATURE_FREQUENCIES: &[FrequencyInfo] = &[
 ];
 
 // =============================================================================
-// AUDIO GENERATION
+// AUDIO GENERATOR IMPLEMENTATION
 // =============================================================================
 
-fn generate_sine_wave(frequency: f64, duration_secs: f64) -> Vec<i16> {
-    let num_samples = (SAMPLE_RATE as f64 * duration_secs) as usize;
-    let mut samples = Vec::with_capacity(num_samples);
-
-    for i in 0..num_samples {
-        let t = i as f64 / SAMPLE_RATE as f64;
-        let sample = AMPLITUDE * (2.0 * PI * frequency * t).sin();
-        samples.push((sample * 32767.0) as i16);
+impl AudioGenerator {
+    fn new(output_dir: PathBuf, duration: f64, config: AudioConfig) -> Self {
+        Self { config, output_dir, duration }
     }
 
-    samples
-}
+    // -------------------------------------------------------------------------
+    // Core Audio Generation
+    // -------------------------------------------------------------------------
 
-fn generate_binaural_beat(base_freq: f64, beat_freq: f64, duration_secs: f64) -> Vec<[i16; 2]> {
-    let num_samples = (SAMPLE_RATE as f64 * duration_secs) as usize;
-    let mut samples = Vec::with_capacity(num_samples);
+    fn generate_sine_wave(&self, frequency: f64, duration_secs: f64) -> Vec<f64> {
+        let num_samples = (self.config.sample_rate as f64 * duration_secs) as usize;
+        let mut samples = Vec::with_capacity(num_samples);
 
-    let left_freq = base_freq;
-    let right_freq = base_freq + beat_freq;
-
-    for i in 0..num_samples {
-        let t = i as f64 / SAMPLE_RATE as f64;
-        let left = AMPLITUDE * (2.0 * PI * left_freq * t).sin();
-        let right = AMPLITUDE * (2.0 * PI * right_freq * t).sin();
-        samples.push([
-            (left * 32767.0) as i16,
-            (right * 32767.0) as i16,
-        ]);
-    }
-
-    samples
-}
-
-fn generate_isochronic_tone(carrier_freq: f64, pulse_freq: f64, duration_secs: f64) -> Vec<i16> {
-    let num_samples = (SAMPLE_RATE as f64 * duration_secs) as usize;
-    let mut samples = Vec::with_capacity(num_samples);
-
-    for i in 0..num_samples {
-        let t = i as f64 / SAMPLE_RATE as f64;
-        let carrier = (2.0 * PI * carrier_freq * t).sin();
-        let envelope = 0.5 * (1.0 + (2.0 * PI * pulse_freq * t).sin());
-        let envelope = envelope.clamp(0.0, 1.0);
-        let sample = AMPLITUDE * carrier * envelope;
-        samples.push((sample * 32767.0) as i16);
-    }
-
-    samples
-}
-
-fn generate_om_tone(duration_secs: f64) -> Vec<i16> {
-    let num_samples = (SAMPLE_RATE as f64 * duration_secs) as usize;
-    let fade_samples = (SAMPLE_RATE as f64 * 0.5) as usize;
-    let mut samples = Vec::with_capacity(num_samples);
-
-    let base = 136.1;
-
-    for i in 0..num_samples {
-        let t = i as f64 / SAMPLE_RATE as f64;
-
-        let wave = (2.0 * PI * base * t).sin()
-            + 0.5 * (2.0 * PI * base * 2.0 * t).sin()
-            + 0.25 * (2.0 * PI * base * 3.0 * t).sin();
-
-        let envelope = if i < fade_samples {
-            i as f64 / fade_samples as f64
-        } else if i >= num_samples - fade_samples {
-            (num_samples - i) as f64 / fade_samples as f64
-        } else {
-            1.0
-        };
-
-        let sample = AMPLITUDE * wave * envelope / 1.75;
-        samples.push((sample * 32767.0) as i16);
-    }
-
-    samples
-}
-
-fn generate_layered_frequencies(frequencies: &[f64], duration_secs: f64) -> Vec<i16> {
-    let num_samples = (SAMPLE_RATE as f64 * duration_secs) as usize;
-    let mut samples = Vec::with_capacity(num_samples);
-    let scale = 1.0 / frequencies.len() as f64;
-
-    for i in 0..num_samples {
-        let t = i as f64 / SAMPLE_RATE as f64;
-        let mut sum = 0.0;
-        for &freq in frequencies {
-            sum += (2.0 * PI * freq * t).sin();
+        for i in 0..num_samples {
+            let t = i as f64 / self.config.sample_rate as f64;
+            let sample = AMPLITUDE * (2.0 * PI * frequency * t).sin();
+            samples.push(sample);
         }
-        let sample = AMPLITUDE * sum * scale;
-        samples.push((sample * 32767.0) as i16);
+
+        samples
     }
 
-    samples
-}
+    fn generate_binaural_beat(&self, base_freq: f64, beat_freq: f64, duration_secs: f64) -> Vec<[f64; 2]> {
+        let num_samples = (self.config.sample_rate as f64 * duration_secs) as usize;
+        let mut samples = Vec::with_capacity(num_samples);
 
-fn generate_singing_bowl(frequency: f64, duration_secs: f64) -> Vec<i16> {
-    let num_samples = (SAMPLE_RATE as f64 * duration_secs) as usize;
-    let mut samples = Vec::with_capacity(num_samples);
+        let left_freq = base_freq;
+        let right_freq = base_freq + beat_freq;
 
-    // Bowl characteristics: fundamental + inharmonic overtones + slow beating
-    let beat_freq = 0.5; // Slow beating between partials
+        for i in 0..num_samples {
+            let t = i as f64 / self.config.sample_rate as f64;
+            let left = AMPLITUDE * (2.0 * PI * left_freq * t).sin();
+            let right = AMPLITUDE * (2.0 * PI * right_freq * t).sin();
+            samples.push([left, right]);
+        }
 
-    for i in 0..num_samples {
-        let t = i as f64 / SAMPLE_RATE as f64;
-
-        // Fundamental with slow amplitude modulation
-        let fundamental = (2.0 * PI * frequency * t).sin()
-            * (1.0 + 0.1 * (2.0 * PI * beat_freq * t).sin());
-
-        // Slightly inharmonic overtones (characteristic of metal bowls)
-        let partial2 = 0.6 * (2.0 * PI * frequency * 2.01 * t).sin();
-        let partial3 = 0.35 * (2.0 * PI * frequency * 3.03 * t).sin();
-        let partial4 = 0.2 * (2.0 * PI * frequency * 4.07 * t).sin();
-        let partial5 = 0.1 * (2.0 * PI * frequency * 5.12 * t).sin();
-
-        // Long natural decay
-        let decay = (-t / (duration_secs * 0.7)).exp();
-
-        // Strike attack
-        let attack = if t < 0.01 {
-            t / 0.01
-        } else {
-            1.0
-        };
-
-        let wave = (fundamental + partial2 + partial3 + partial4 + partial5) / 2.25;
-        let sample = AMPLITUDE * wave * decay * attack;
-        samples.push((sample * 32767.0) as i16);
+        samples
     }
 
-    samples
-}
+    fn generate_isochronic_tone(&self, carrier_freq: f64, pulse_freq: f64, duration_secs: f64) -> Vec<f64> {
+        let num_samples = (self.config.sample_rate as f64 * duration_secs) as usize;
+        let mut samples = Vec::with_capacity(num_samples);
 
-fn generate_frequency_sweep(start_freq: f64, end_freq: f64, duration_secs: f64) -> Vec<i16> {
-    let num_samples = (SAMPLE_RATE as f64 * duration_secs) as usize;
-    let mut samples = Vec::with_capacity(num_samples);
+        for i in 0..num_samples {
+            let t = i as f64 / self.config.sample_rate as f64;
+            let carrier = (2.0 * PI * carrier_freq * t).sin();
+            let envelope = 0.5 * (1.0 + (2.0 * PI * pulse_freq * t).sin());
+            let envelope = envelope.clamp(0.0, 1.0);
+            let sample = AMPLITUDE * carrier * envelope;
+            samples.push(sample);
+        }
 
-    for i in 0..num_samples {
-        let t = i as f64 / SAMPLE_RATE as f64;
-        let progress = t / duration_secs;
-
-        // Logarithmic sweep (more perceptually uniform)
-        let freq = start_freq * (end_freq / start_freq).powf(progress);
-        let phase = 2.0 * PI * start_freq * duration_secs
-            * ((end_freq / start_freq).powf(progress) - 1.0)
-            / (end_freq / start_freq).ln();
-
-        let sample = AMPLITUDE * phase.sin();
-        samples.push((sample * 32767.0) as i16);
+        samples
     }
 
-    samples
-}
+    fn generate_om_tone(&self, duration_secs: f64) -> Vec<f64> {
+        let num_samples = (self.config.sample_rate as f64 * duration_secs) as usize;
+        let fade_samples = (self.config.sample_rate as f64 * 0.5) as usize;
+        let mut samples = Vec::with_capacity(num_samples);
 
-fn generate_white_noise(duration_secs: f64) -> Vec<i16> {
-    let num_samples = (SAMPLE_RATE as f64 * duration_secs) as usize;
-    let mut samples = Vec::with_capacity(num_samples);
+        let base = 136.1;
 
-    // Simple LCG random number generator
-    let mut seed: u64 = 12345;
-    for _ in 0..num_samples {
-        seed = seed.wrapping_mul(1103515245).wrapping_add(12345);
-        let random = ((seed >> 16) & 0x7FFF) as f64 / 32767.0 * 2.0 - 1.0;
-        let sample = AMPLITUDE * random * 0.7;
-        samples.push((sample * 32767.0) as i16);
+        for i in 0..num_samples {
+            let t = i as f64 / self.config.sample_rate as f64;
+
+            let wave = (2.0 * PI * base * t).sin()
+                + 0.5 * (2.0 * PI * base * 2.0 * t).sin()
+                + 0.25 * (2.0 * PI * base * 3.0 * t).sin();
+
+            let envelope = if i < fade_samples {
+                i as f64 / fade_samples as f64
+            } else if i >= num_samples - fade_samples {
+                (num_samples - i) as f64 / fade_samples as f64
+            } else {
+                1.0
+            };
+
+            let sample = AMPLITUDE * wave * envelope / 1.75;
+            samples.push(sample);
+        }
+
+        samples
     }
 
-    samples
-}
+    fn generate_layered_frequencies(&self, frequencies: &[f64], duration_secs: f64) -> Vec<f64> {
+        let num_samples = (self.config.sample_rate as f64 * duration_secs) as usize;
+        let mut samples = Vec::with_capacity(num_samples);
+        let scale = 1.0 / frequencies.len() as f64;
 
-fn generate_pink_noise(duration_secs: f64) -> Vec<i16> {
-    let num_samples = (SAMPLE_RATE as f64 * duration_secs) as usize;
-    let mut samples = Vec::with_capacity(num_samples);
-
-    // Voss-McCartney algorithm for pink noise
-    let mut seed: u64 = 12345;
-    let mut octaves = [0.0f64; 16];
-
-    for i in 0..num_samples {
-        seed = seed.wrapping_mul(1103515245).wrapping_add(12345);
-        let white = ((seed >> 16) & 0x7FFF) as f64 / 32767.0 * 2.0 - 1.0;
-
-        // Update octaves based on bit changes
-        let mut sum = white;
-        for (j, octave) in octaves.iter_mut().enumerate() {
-            if (i >> j) & 1 != ((i.wrapping_sub(1)) >> j) & 1 {
-                seed = seed.wrapping_mul(1103515245).wrapping_add(12345);
-                *octave = ((seed >> 16) & 0x7FFF) as f64 / 32767.0 * 2.0 - 1.0;
+        for i in 0..num_samples {
+            let t = i as f64 / self.config.sample_rate as f64;
+            let mut sum = 0.0;
+            for &freq in frequencies {
+                sum += (2.0 * PI * freq * t).sin();
             }
-            sum += *octave;
+            let sample = AMPLITUDE * sum * scale;
+            samples.push(sample);
         }
 
-        let sample = AMPLITUDE * sum / 17.0 * 0.7;
-        samples.push((sample * 32767.0) as i16);
+        samples
     }
 
-    samples
-}
+    fn generate_singing_bowl(&self, frequency: f64, duration_secs: f64) -> Vec<f64> {
+        let num_samples = (self.config.sample_rate as f64 * duration_secs) as usize;
+        let mut samples = Vec::with_capacity(num_samples);
 
-fn generate_brown_noise(duration_secs: f64) -> Vec<i16> {
-    let num_samples = (SAMPLE_RATE as f64 * duration_secs) as usize;
-    let mut samples = Vec::with_capacity(num_samples);
+        // Bowl characteristics: fundamental + inharmonic overtones + slow beating
+        let beat_freq = 0.5; // Slow beating between partials
 
-    let mut seed: u64 = 12345;
-    let mut last = 0.0f64;
+        for i in 0..num_samples {
+            let t = i as f64 / self.config.sample_rate as f64;
 
-    for _ in 0..num_samples {
-        seed = seed.wrapping_mul(1103515245).wrapping_add(12345);
-        let white = ((seed >> 16) & 0x7FFF) as f64 / 32767.0 * 2.0 - 1.0;
+            // Fundamental with slow amplitude modulation
+            let fundamental = (2.0 * PI * frequency * t).sin()
+                * (1.0 + 0.1 * (2.0 * PI * beat_freq * t).sin());
 
-        // Integrate white noise
-        last = (last + white * 0.02).clamp(-1.0, 1.0);
-        let sample = AMPLITUDE * last * 0.7;
-        samples.push((sample * 32767.0) as i16);
-    }
+            // Slightly inharmonic overtones (characteristic of metal bowls)
+            let partial2 = 0.6 * (2.0 * PI * frequency * 2.01 * t).sin();
+            let partial3 = 0.35 * (2.0 * PI * frequency * 3.03 * t).sin();
+            let partial4 = 0.2 * (2.0 * PI * frequency * 4.07 * t).sin();
+            let partial5 = 0.1 * (2.0 * PI * frequency * 5.12 * t).sin();
 
-    samples
-}
+            // Long natural decay
+            let decay = (-t / (duration_secs * 0.7)).exp();
 
-fn generate_drone(frequencies: &[f64], duration_secs: f64) -> Vec<i16> {
-    let num_samples = (SAMPLE_RATE as f64 * duration_secs) as usize;
-    let fade_samples = (SAMPLE_RATE as f64 * 3.0) as usize;
-    let mut samples = Vec::with_capacity(num_samples);
+            // Strike attack
+            let attack = if t < 0.01 {
+                t / 0.01
+            } else {
+                1.0
+            };
 
-    for i in 0..num_samples {
-        let t = i as f64 / SAMPLE_RATE as f64;
-        let mut sum = 0.0;
-
-        for (idx, &freq) in frequencies.iter().enumerate() {
-            // Slight detuning for richness
-            let detune = 1.0 + (idx as f64 * 0.001);
-            // Slow amplitude modulation at different rates
-            let mod_rate = 0.1 + idx as f64 * 0.03;
-            let mod_depth = 0.15;
-
-            let amp = 1.0 + mod_depth * (2.0 * PI * mod_rate * t).sin();
-            sum += amp * (2.0 * PI * freq * detune * t).sin();
+            let wave = (fundamental + partial2 + partial3 + partial4 + partial5) / 2.25;
+            let sample = AMPLITUDE * wave * decay * attack;
+            samples.push(sample);
         }
 
-        // Fade in/out
-        let envelope = if i < fade_samples {
-            i as f64 / fade_samples as f64
-        } else if i >= num_samples - fade_samples {
-            (num_samples - i) as f64 / fade_samples as f64
-        } else {
-            1.0
+        samples
+    }
+
+    fn generate_frequency_sweep(&self, start_freq: f64, end_freq: f64, duration_secs: f64) -> Vec<f64> {
+        let num_samples = (self.config.sample_rate as f64 * duration_secs) as usize;
+        let mut samples = Vec::with_capacity(num_samples);
+
+        for i in 0..num_samples {
+            let t = i as f64 / self.config.sample_rate as f64;
+            let progress = t / duration_secs;
+
+            // Logarithmic sweep (more perceptually uniform)
+            let _freq = start_freq * (end_freq / start_freq).powf(progress);
+            let phase = 2.0 * PI * start_freq * duration_secs
+                * ((end_freq / start_freq).powf(progress) - 1.0)
+                / (end_freq / start_freq).ln();
+
+            let sample = AMPLITUDE * phase.sin();
+            samples.push(sample);
+        }
+
+        samples
+    }
+
+    fn generate_white_noise(&self, duration_secs: f64) -> Vec<f64> {
+        let num_samples = (self.config.sample_rate as f64 * duration_secs) as usize;
+        let mut samples = Vec::with_capacity(num_samples);
+
+        // Simple LCG random number generator
+        let mut seed: u64 = 12345;
+        for _ in 0..num_samples {
+            seed = seed.wrapping_mul(1103515245).wrapping_add(12345);
+            let random = ((seed >> 16) & 0x7FFF) as f64 / 32767.0 * 2.0 - 1.0;
+            let sample = AMPLITUDE * random * 0.7;
+            samples.push(sample);
+        }
+
+        samples
+    }
+
+    fn generate_pink_noise(&self, duration_secs: f64) -> Vec<f64> {
+        let num_samples = (self.config.sample_rate as f64 * duration_secs) as usize;
+        let mut samples = Vec::with_capacity(num_samples);
+
+        // Voss-McCartney algorithm for pink noise
+        let mut seed: u64 = 12345;
+        let mut octaves = [0.0f64; 16];
+
+        for i in 0..num_samples {
+            seed = seed.wrapping_mul(1103515245).wrapping_add(12345);
+            let white = ((seed >> 16) & 0x7FFF) as f64 / 32767.0 * 2.0 - 1.0;
+
+            // Update octaves based on bit changes
+            let mut sum = white;
+            for (j, octave) in octaves.iter_mut().enumerate() {
+                if (i >> j) & 1 != ((i.wrapping_sub(1)) >> j) & 1 {
+                    seed = seed.wrapping_mul(1103515245).wrapping_add(12345);
+                    *octave = ((seed >> 16) & 0x7FFF) as f64 / 32767.0 * 2.0 - 1.0;
+                }
+                sum += *octave;
+            }
+
+            let sample = AMPLITUDE * sum / 17.0 * 0.7;
+            samples.push(sample);
+        }
+
+        samples
+    }
+
+    fn generate_brown_noise(&self, duration_secs: f64) -> Vec<f64> {
+        let num_samples = (self.config.sample_rate as f64 * duration_secs) as usize;
+        let mut samples = Vec::with_capacity(num_samples);
+
+        let mut seed: u64 = 12345;
+        let mut last = 0.0f64;
+
+        for _ in 0..num_samples {
+            seed = seed.wrapping_mul(1103515245).wrapping_add(12345);
+            let white = ((seed >> 16) & 0x7FFF) as f64 / 32767.0 * 2.0 - 1.0;
+
+            // Integrate white noise
+            last = (last + white * 0.02).clamp(-1.0, 1.0);
+            let sample = AMPLITUDE * last * 0.7;
+            samples.push(sample);
+        }
+
+        samples
+    }
+
+    fn generate_drone(&self, frequencies: &[f64], duration_secs: f64) -> Vec<f64> {
+        let num_samples = (self.config.sample_rate as f64 * duration_secs) as usize;
+        let fade_samples = (self.config.sample_rate as f64 * 3.0) as usize;
+        let mut samples = Vec::with_capacity(num_samples);
+
+        for i in 0..num_samples {
+            let t = i as f64 / self.config.sample_rate as f64;
+            let mut sum = 0.0;
+
+            for (idx, &freq) in frequencies.iter().enumerate() {
+                // Slight detuning for richness
+                let detune = 1.0 + (idx as f64 * 0.001);
+                // Slow amplitude modulation at different rates
+                let mod_rate = 0.1 + idx as f64 * 0.03;
+                let mod_depth = 0.15;
+
+                let amp = 1.0 + mod_depth * (2.0 * PI * mod_rate * t).sin();
+                sum += amp * (2.0 * PI * freq * detune * t).sin();
+            }
+
+            // Fade in/out
+            let envelope = if i < fade_samples {
+                i as f64 / fade_samples as f64
+            } else if i >= num_samples - fade_samples {
+                (num_samples - i) as f64 / fade_samples as f64
+            } else {
+                1.0
+            };
+
+            let sample = AMPLITUDE * sum * envelope / frequencies.len() as f64;
+            samples.push(sample);
+        }
+
+        samples
+    }
+
+    fn apply_fade(&self, samples: &mut [f64], fade_duration_secs: f64) {
+        let fade_samples = (self.config.sample_rate as f64 * fade_duration_secs) as usize;
+        let fade_samples = fade_samples.min(samples.len() / 2);
+
+        for i in 0..fade_samples {
+            let factor = i as f64 / fade_samples as f64;
+            samples[i] *= factor;
+        }
+
+        let len = samples.len();
+        for i in 0..fade_samples {
+            let factor = i as f64 / fade_samples as f64;
+            samples[len - 1 - i] *= factor;
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // File Output
+    // -------------------------------------------------------------------------
+
+    fn save_mono_wav(&self, path: &PathBuf, samples: &[f64]) -> Result<(), hound::Error> {
+        let spec = WavSpec {
+            channels: 1,
+            sample_rate: self.config.sample_rate,
+            bits_per_sample: self.config.bit_depth,
+            sample_format: SampleFormat::Int,
         };
 
-        let sample = AMPLITUDE * sum * envelope / frequencies.len() as f64;
-        samples.push((sample * 32767.0) as i16);
+        let mut writer = WavWriter::create(path, spec)?;
+        match self.config.bit_depth {
+            16 => {
+                for &sample in samples {
+                    writer.write_sample(convert_sample_i16(sample))?;
+                }
+            }
+            24 => {
+                for &sample in samples {
+                    writer.write_sample(convert_sample_i32_24bit(sample))?;
+                }
+            }
+            32 => {
+                for &sample in samples {
+                    writer.write_sample(convert_sample_i32(sample))?;
+                }
+            }
+            _ => {
+                // Default to 16-bit for unsupported bit depths
+                for &sample in samples {
+                    writer.write_sample(convert_sample_i16(sample))?;
+                }
+            }
+        }
+        writer.finalize()?;
+        println!("  Saved: {}", path.display());
+        Ok(())
     }
 
-    samples
-}
-
-fn apply_fade(samples: &mut [i16], fade_duration_secs: f64) {
-    let fade_samples = (SAMPLE_RATE as f64 * fade_duration_secs) as usize;
-    let fade_samples = fade_samples.min(samples.len() / 2);
-
-    for i in 0..fade_samples {
-        let factor = i as f64 / fade_samples as f64;
-        samples[i] = (samples[i] as f64 * factor) as i16;
-    }
-
-    let len = samples.len();
-    for i in 0..fade_samples {
-        let factor = i as f64 / fade_samples as f64;
-        samples[len - 1 - i] = (samples[len - 1 - i] as f64 * factor) as i16;
-    }
-}
-
-// =============================================================================
-// FILE OUTPUT
-// =============================================================================
-
-fn save_mono_wav(path: &PathBuf, samples: &[i16]) -> Result<(), hound::Error> {
-    let spec = WavSpec {
-        channels: 1,
-        sample_rate: SAMPLE_RATE,
-        bits_per_sample: 16,
-        sample_format: SampleFormat::Int,
-    };
-
-    let mut writer = WavWriter::create(path, spec)?;
-    for &sample in samples {
-        writer.write_sample(sample)?;
-    }
-    writer.finalize()?;
-    println!("  Saved: {}", path.display());
-    Ok(())
-}
-
-fn save_stereo_wav(path: &PathBuf, samples: &[[i16; 2]]) -> Result<(), hound::Error> {
-    let spec = WavSpec {
-        channels: 2,
-        sample_rate: SAMPLE_RATE,
-        bits_per_sample: 16,
-        sample_format: SampleFormat::Int,
-    };
-
-    let mut writer = WavWriter::create(path, spec)?;
-    for &[left, right] in samples {
-        writer.write_sample(left)?;
-        writer.write_sample(right)?;
-    }
-    writer.finalize()?;
-    println!("  Saved: {}", path.display());
-    Ok(())
-}
-
-// =============================================================================
-// PRESET GENERATORS
-// =============================================================================
-
-fn generate_solfeggio_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("solfeggio");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Solfeggio Frequencies ===");
-    for freq_info in SOLFEGGIO_FREQUENCIES {
-        println!("  {} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("solfeggio_{}hz.wav", freq_info.hz as u32));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_angel_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("angels");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Angel Frequencies ===");
-    for freq_info in ANGEL_FREQUENCIES {
-        println!("  {} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("angel_{}hz.wav", freq_info.hz as u32));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_binaural_set(output_dir: &PathBuf, duration: f64, base_freq: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("binaural");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Binaural Beat Presets ===");
-    println!("(Use headphones for binaural beats to work!)");
-
-    for state in BRAINWAVE_STATES {
-        let target_freq = (state.low_hz + state.high_hz) / 2.0;
-        println!("  {} ({} Hz): {}", state.name.to_uppercase(), target_freq, state.description);
-
-        let samples = generate_binaural_beat(base_freq, target_freq, duration);
-        let path = dir.join(format!("binaural_{}_{:.1}hz.wav", state.name, target_freq));
-        save_stereo_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_schumann(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("schumann");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Schumann Resonance (7.83 Hz) ===");
-
-    // Isochronic version
-    println!("  Isochronic tone (works without headphones)");
-    let samples = generate_isochronic_tone(200.0, 7.83, duration);
-    let path = dir.join("schumann_7.83hz_isochronic.wav");
-    save_mono_wav(&path, &samples)?;
-
-    // Binaural version
-    println!("  Binaural beat (requires headphones)");
-    let samples = generate_binaural_beat(200.0, 7.83, duration);
-    let path = dir.join("schumann_7.83hz_binaural.wav");
-    save_stereo_wav(&path, &samples)?;
-
-    Ok(())
-}
-
-fn generate_chakra_meditation(output_dir: &PathBuf, duration_per_chakra: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("chakras");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Chakra Meditation Sequence ===");
-
-    let mut full_sequence: Vec<i16> = Vec::new();
-
-    for freq_info in CHAKRA_FREQUENCIES {
-        println!("  {} ({} Hz): {}", freq_info.name, freq_info.hz, freq_info.description);
-
-        let mut samples = generate_sine_wave(freq_info.hz, duration_per_chakra);
-        apply_fade(&mut samples, 2.0);
-
-        let path = dir.join(format!("chakra_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-
-        full_sequence.extend_from_slice(&samples);
-    }
-
-    println!("  Full meditation sequence...");
-    let path = dir.join("chakra_full_meditation.wav");
-    save_mono_wav(&path, &full_sequence)?;
-
-    Ok(())
-}
-
-fn generate_tuning_comparison(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("tuning");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating 432 Hz vs 440 Hz Comparison ===");
-
-    let samples_432 = generate_sine_wave(432.0, duration);
-    let samples_440 = generate_sine_wave(440.0, duration);
-
-    save_mono_wav(&dir.join("tuning_432hz_natural.wav"), &samples_432)?;
-    save_mono_wav(&dir.join("tuning_440hz_standard.wav"), &samples_440)?;
-
-    // A-B comparison (alternating 5 seconds each)
-    println!("  A-B comparison (alternating)...");
-    let segment_duration = 5.0;
-    let mut comparison: Vec<i16> = Vec::new();
-    let num_segments = (duration / (segment_duration * 2.0)) as usize;
-
-    for _ in 0..num_segments.max(1) {
-        comparison.extend(generate_sine_wave(432.0, segment_duration));
-        comparison.extend(generate_sine_wave(440.0, segment_duration));
-    }
-
-    save_mono_wav(&dir.join("tuning_432_440_comparison.wav"), &comparison)?;
-
-    Ok(())
-}
-
-fn generate_om(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    fs::create_dir_all(output_dir).ok();
-
-    println!("\n=== Generating Om Tone (136.1 Hz with harmonics) ===");
-    let samples = generate_om_tone(duration);
-    let path = output_dir.join("om_136.1hz.wav");
-    save_mono_wav(&path, &samples)?;
-
-    Ok(())
-}
-
-fn generate_planetary_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("planetary");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Planetary Frequencies (Cosmic Octave) ===");
-    for freq_info in PLANETARY_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("planet_{}_{:.2}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_rife_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("rife");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Rife Frequencies ===");
-    for freq_info in RIFE_FREQUENCIES {
-        println!("  {} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("rife_{}hz.wav", freq_info.hz as u32));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_sacred_math_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("sacred_math");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Sacred Mathematics Frequencies ===");
-    for freq_info in SACRED_MATH_FREQUENCIES {
-        println!("  {} Hz: {}", freq_info.hz, freq_info.description);
-
-        // Use isochronic for very low frequencies (phi, pi, etc)
-        let samples = if freq_info.hz < 20.0 {
-            generate_isochronic_tone(200.0, freq_info.hz, duration)
-        } else {
-            generate_sine_wave(freq_info.hz, duration)
+    fn save_stereo_wav(&self, path: &PathBuf, samples: &[[f64; 2]]) -> Result<(), hound::Error> {
+        let spec = WavSpec {
+            channels: 2,
+            sample_rate: self.config.sample_rate,
+            bits_per_sample: self.config.bit_depth,
+            sample_format: SampleFormat::Int,
         };
 
-        let path = dir.join(format!("{}_{:.3}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_consciousness_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("consciousness");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Consciousness Exploration Frequencies ===");
-    println!("(Binaural beats - use headphones!)");
-
-    for freq_info in CONSCIOUSNESS_FREQUENCIES {
-        println!("  {} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_binaural_beat(200.0, freq_info.hz, duration);
-        let path = dir.join(format!("{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
-        save_stereo_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_singing_bowl_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("singing_bowls");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Tibetan Singing Bowl Tones ===");
-    for freq_info in SINGING_BOWL_FREQUENCIES {
-        println!("  {} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("bowl_{}_{:.1}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_zodiac_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("zodiac");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Zodiac Frequencies ===");
-    for freq_info in ZODIAC_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("zodiac_{}_{:.2}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_monroe_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("monroe_focus");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Monroe Institute Focus Levels ===");
-    println!("(Binaural beats - use headphones!)");
-
-    for freq_info in MONROE_FOCUS_LEVELS {
-        println!("  {} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_binaural_beat(100.0, freq_info.hz, duration);
-        let path = dir.join(format!("{}_binaural.wav", freq_info.name));
-        save_stereo_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_elemental_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("elements");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Elemental Frequencies ===");
-    for freq_info in ELEMENTAL_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("element_{}_{:.2}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_noise_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("noise");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Noise Backgrounds ===");
-
-    println!("  White noise (all frequencies equal)");
-    let samples = generate_white_noise(duration);
-    save_mono_wav(&dir.join("white_noise.wav"), &samples)?;
-
-    println!("  Pink noise (1/f, nature-like)");
-    let samples = generate_pink_noise(duration);
-    save_mono_wav(&dir.join("pink_noise.wav"), &samples)?;
-
-    println!("  Brown/Red noise (1/f², deep rumble)");
-    let samples = generate_brown_noise(duration);
-    save_mono_wav(&dir.join("brown_noise.wav"), &samples)?;
-
-    Ok(())
-}
-
-fn generate_frequency_sweep_file(output_dir: &PathBuf, start: f64, end: f64, duration: f64) -> Result<(), hound::Error> {
-    fs::create_dir_all(output_dir).ok();
-
-    println!("\n=== Generating Frequency Sweep {} Hz -> {} Hz ===", start, end);
-    let samples = generate_frequency_sweep(start, end, duration);
-    let path = output_dir.join(format!("sweep_{:.0}hz_to_{:.0}hz.wav", start, end));
-    save_mono_wav(&path, &samples)?;
-
-    Ok(())
-}
-
-fn generate_drone_file(output_dir: &PathBuf, frequencies: &[f64], duration: f64) -> Result<(), hound::Error> {
-    fs::create_dir_all(output_dir).ok();
-
-    println!("\n=== Generating Ambient Drone ===");
-    println!("  Frequencies: {:?}", frequencies);
-    let samples = generate_drone(frequencies, duration);
-
-    let freq_str: Vec<String> = frequencies.iter().map(|f| format!("{:.0}", f)).collect();
-    let path = output_dir.join(format!("drone_{}.wav", freq_str.join("_")));
-    save_mono_wav(&path, &samples)?;
-
-    Ok(())
-}
-
-fn generate_archangel_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("archangels");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Archangel Frequencies ===");
-    for freq_info in ARCHANGEL_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("archangel_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_crystal_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("crystals");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Crystal Healing Frequencies ===");
-    for freq_info in CRYSTAL_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("crystal_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_sacred_geometry_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("sacred_geometry");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Sacred Geometry / Merkaba Frequencies ===");
-    for freq_info in SACRED_GEOMETRY_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("geometry_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_shamanic_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("shamanic");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Shamanic Journey Frequencies ===");
-    println!("(Binaural beats - use headphones!)");
-
-    for freq_info in SHAMANIC_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        if freq_info.hz < 20.0 {
-            let samples = generate_binaural_beat(200.0, freq_info.hz, duration);
-            let path = dir.join(format!("shamanic_{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
-            save_stereo_wav(&path, &samples)?;
-        } else {
-            let samples = generate_isochronic_tone(freq_info.hz, 4.5, duration);
-            let path = dir.join(format!("shamanic_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
+        let mut writer = WavWriter::create(path, spec)?;
+        match self.config.bit_depth {
+            16 => {
+                for &[left, right] in samples {
+                    writer.write_sample(convert_sample_i16(left))?;
+                    writer.write_sample(convert_sample_i16(right))?;
+                }
+            }
+            24 => {
+                for &[left, right] in samples {
+                    writer.write_sample(convert_sample_i32_24bit(left))?;
+                    writer.write_sample(convert_sample_i32_24bit(right))?;
+                }
+            }
+            32 => {
+                for &[left, right] in samples {
+                    writer.write_sample(convert_sample_i32(left))?;
+                    writer.write_sample(convert_sample_i32(right))?;
+                }
+            }
+            _ => {
+                for &[left, right] in samples {
+                    writer.write_sample(convert_sample_i16(left))?;
+                    writer.write_sample(convert_sample_i16(right))?;
+                }
+            }
         }
+        writer.finalize()?;
+        println!("  Saved: {}", path.display());
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_dna_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("dna_activation");
-    fs::create_dir_all(&dir).ok();
+    // -------------------------------------------------------------------------
+    // Preset Generators
+    // -------------------------------------------------------------------------
 
-    println!("\n=== Generating DNA Activation Frequencies ===");
-    for freq_info in DNA_ACTIVATION_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("dna_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
+    fn generate_solfeggio_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("solfeggio");
+        fs::create_dir_all(&dir).ok();
 
-fn generate_color_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("colors");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Color/Light Frequencies ===");
-    for freq_info in COLOR_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("color_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_egyptian_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("egyptian");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Egyptian / Pyramid Frequencies ===");
-    for freq_info in EGYPTIAN_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("egypt_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_moon_phase_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("moon_phases");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Moon Phase Frequencies ===");
-    for freq_info in MOON_PHASE_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("moon_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_ascended_master_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("ascended_masters");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Ascended Master Frequencies ===");
-    for freq_info in ASCENDED_MASTER_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("master_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_starseed_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("starseeds");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Starseed / ET Frequencies ===");
-    for freq_info in STARSEED_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("starseed_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_tarot_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("tarot");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Tarot Major Arcana Frequencies ===");
-    for freq_info in TAROT_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        // Skip The Fool (0 Hz) or use silence
-        if freq_info.hz < 1.0 {
-            continue;
+        println!("\n=== Generating Solfeggio Frequencies ===");
+        for freq_info in SOLFEGGIO_FREQUENCIES {
+            println!("  {} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("solfeggio_{}hz.wav", freq_info.hz as u32));
+            self.save_mono_wav(&path, &samples)?;
         }
-        let samples = if freq_info.hz < 20.0 {
-            generate_isochronic_tone(200.0, freq_info.hz, duration)
-        } else {
-            generate_sine_wave(freq_info.hz, duration)
-        };
-        let path = dir.join(format!("tarot_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_enochian_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("enochian");
-    fs::create_dir_all(&dir).ok();
+    fn generate_angel_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("angels");
+        fs::create_dir_all(&dir).ok();
 
-    println!("\n=== Generating Enochian / Ceremonial Magic Frequencies ===");
-    for freq_info in ENOCHIAN_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("enochian_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_reiki_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("reiki");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Reiki Symbol Frequencies ===");
-    for freq_info in REIKI_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("reiki_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_intention_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("intentions");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Intention / Affirmation Frequencies ===");
-    for freq_info in INTENTION_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("intention_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_norse_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("norse");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Norse / Viking Frequencies ===");
-    for freq_info in NORSE_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("norse_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_greek_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("greek");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Greek / Olympian Frequencies ===");
-    for freq_info in GREEK_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("greek_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_hindu_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("hindu");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Hindu Mantra / Deity Frequencies ===");
-    for freq_info in HINDU_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("hindu_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_buddhist_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("buddhist");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Buddhist Frequencies ===");
-    for freq_info in BUDDHIST_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("buddhist_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_celtic_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("celtic");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Celtic / Druid Frequencies ===");
-    for freq_info in CELTIC_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("celtic_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_kabbalah_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("kabbalah");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Kabbalah / Tree of Life Frequencies ===");
-    for freq_info in KABBALAH_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("kabbalah_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_orisha_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("orisha");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Yoruba / Orisha Frequencies ===");
-    for freq_info in ORISHA_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("orisha_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_vodou_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("vodou");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Vodou / Lwa Frequencies ===");
-    for freq_info in VODOU_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("vodou_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_angelic_hierarchy_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("angelic_hierarchy");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Angelic Hierarchy (Nine Choirs) Frequencies ===");
-    for freq_info in ANGELIC_HIERARCHY_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("choir_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_goetia_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("goetia");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Goetia / Solomonic Frequencies ===");
-    println!("(For study and banishing work)");
-    for freq_info in GOETIA_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("goetia_{}_{:.1}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_psychic_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("psychic");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Psychic Ability Frequencies ===");
-    println!("(Binaural beats for low frequencies - use headphones!)");
-    for freq_info in PSYCHIC_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        if freq_info.hz < 20.0 {
-            let samples = generate_binaural_beat(200.0, freq_info.hz, duration);
-            let path = dir.join(format!("psychic_{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
-            save_stereo_wav(&path, &samples)?;
-        } else {
-            let samples = generate_sine_wave(freq_info.hz, duration);
-            let path = dir.join(format!("psychic_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
+        println!("\n=== Generating Angel Frequencies ===");
+        for freq_info in ANGEL_FREQUENCIES {
+            println!("  {} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("angel_{}hz.wav", freq_info.hz as u32));
+            self.save_mono_wav(&path, &samples)?;
         }
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_akashic_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("akashic");
-    fs::create_dir_all(&dir).ok();
+    fn generate_binaural_set(&self, base_freq: f64) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("binaural");
+        fs::create_dir_all(&dir).ok();
 
-    println!("\n=== Generating Akashic Records / Past Life Frequencies ===");
-    println!("(Binaural beats for low frequencies - use headphones!)");
-    for freq_info in AKASHIC_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        if freq_info.hz < 20.0 {
-            let samples = generate_binaural_beat(200.0, freq_info.hz, duration);
-            let path = dir.join(format!("akashic_{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
-            save_stereo_wav(&path, &samples)?;
-        } else {
-            let samples = generate_sine_wave(freq_info.hz, duration);
-            let path = dir.join(format!("akashic_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
+        println!("\n=== Generating Binaural Beat Presets ===");
+        println!("(Use headphones for binaural beats to work!)");
+
+        for state in BRAINWAVE_STATES {
+            let target_freq = (state.low_hz + state.high_hz) / 2.0;
+            println!("  {} ({} Hz): {}", state.name.to_uppercase(), target_freq, state.description);
+
+            let samples = self.generate_binaural_beat(base_freq, target_freq, self.duration);
+            let path = dir.join(format!("binaural_{}_{:.1}hz.wav", state.name, target_freq));
+            self.save_stereo_wav(&path, &samples)?;
         }
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_protection_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("protection");
-    fs::create_dir_all(&dir).ok();
+    fn generate_schumann(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("schumann");
+        fs::create_dir_all(&dir).ok();
 
-    println!("\n=== Generating Protection / Banishing Frequencies ===");
-    for freq_info in PROTECTION_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("protection_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
+        println!("\n=== Generating Schumann Resonance (7.83 Hz) ===");
+
+        // Isochronic version
+        println!("  Isochronic tone (works without headphones)");
+        let samples = self.generate_isochronic_tone(200.0, 7.83, self.duration);
+        let path = dir.join("schumann_7.83hz_isochronic.wav");
+        self.save_mono_wav(&path, &samples)?;
+
+        // Binaural version
+        println!("  Binaural beat (requires headphones)");
+        let samples = self.generate_binaural_beat(200.0, 7.83, self.duration);
+        let path = dir.join("schumann_7.83hz_binaural.wav");
+        self.save_stereo_wav(&path, &samples)?;
+
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_animal_totem_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("animal_totems");
-    fs::create_dir_all(&dir).ok();
+    fn generate_chakra_meditation(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("chakras");
+        fs::create_dir_all(&dir).ok();
 
-    println!("\n=== Generating Animal Totem / Spirit Animal Frequencies ===");
-    for freq_info in ANIMAL_TOTEM_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("totem_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
+        println!("\n=== Generating Chakra Meditation Sequence ===");
 
-fn generate_fae_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("fae");
-    fs::create_dir_all(&dir).ok();
+        let mut full_sequence: Vec<f64> = Vec::new();
 
-    println!("\n=== Generating Fairy / Elemental Being Frequencies ===");
-    for freq_info in FAE_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("fae_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
+        for freq_info in CHAKRA_FREQUENCIES {
+            println!("  {} ({} Hz): {}", freq_info.name, freq_info.hz, freq_info.description);
 
-fn generate_abundance_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("abundance");
-    fs::create_dir_all(&dir).ok();
+            let mut samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            self.apply_fade(&mut samples, 2.0);
 
-    println!("\n=== Generating Abundance / Wealth Frequencies ===");
-    for freq_info in ABUNDANCE_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("abundance_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
+            let path = dir.join(format!("chakra_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
 
-fn generate_love_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("love");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Love / Relationship Frequencies ===");
-    for freq_info in LOVE_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("love_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_dimension_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("dimensions");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Dimensional / Reality Shifting Frequencies ===");
-    println!("(Binaural beats for low frequencies - use headphones!)");
-    for freq_info in DIMENSION_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        if freq_info.hz < 20.0 {
-            let samples = generate_binaural_beat(200.0, freq_info.hz, duration);
-            let path = dir.join(format!("dimension_{}_{:.0}hz_binaural.wav", freq_info.name, freq_info.hz));
-            save_stereo_wav(&path, &samples)?;
-        } else {
-            let samples = generate_sine_wave(freq_info.hz, duration);
-            let path = dir.join(format!("dimension_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
+            full_sequence.extend_from_slice(&samples);
         }
+
+        println!("  Full meditation sequence...");
+        let path = dir.join("chakra_full_meditation.wav");
+        self.save_mono_wav(&path, &full_sequence)?;
+
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_aura_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("aura");
-    fs::create_dir_all(&dir).ok();
+    fn generate_tuning_comparison(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("tuning");
+        fs::create_dir_all(&dir).ok();
 
-    println!("\n=== Generating Aura Layer Frequencies ===");
-    for freq_info in AURA_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("aura_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
+        println!("\n=== Generating 432 Hz vs 440 Hz Comparison ===");
 
-fn generate_chinese_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("chinese");
-    fs::create_dir_all(&dir).ok();
+        let samples_432 = self.generate_sine_wave(432.0, self.duration);
+        let samples_440 = self.generate_sine_wave(440.0, self.duration);
 
-    println!("\n=== Generating Chinese / Taoist Frequencies ===");
-    for freq_info in CHINESE_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("chinese_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
+        self.save_mono_wav(&dir.join("tuning_432hz_natural.wav"), &samples_432)?;
+        self.save_mono_wav(&dir.join("tuning_440hz_standard.wav"), &samples_440)?;
 
-fn generate_shinto_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("shinto");
-    fs::create_dir_all(&dir).ok();
+        // A-B comparison (alternating 5 seconds each)
+        println!("  A-B comparison (alternating)...");
+        let segment_duration = 5.0;
+        let mut comparison: Vec<f64> = Vec::new();
+        let num_segments = (self.duration / (segment_duration * 2.0)) as usize;
 
-    println!("\n=== Generating Japanese / Shinto Frequencies ===");
-    for freq_info in SHINTO_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("shinto_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_sumerian_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("sumerian");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Sumerian / Mesopotamian Frequencies ===");
-    for freq_info in SUMERIAN_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("sumerian_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_mesoamerican_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("mesoamerican");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Mayan / Aztec Frequencies ===");
-    println!("(Binaural beats for calendar frequencies - use headphones!)");
-    for freq_info in MESOAMERICAN_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        if freq_info.hz < 20.0 {
-            let samples = generate_binaural_beat(200.0, freq_info.hz, duration);
-            let path = dir.join(format!("meso_{}_{:.0}hz_binaural.wav", freq_info.name, freq_info.hz));
-            save_stereo_wav(&path, &samples)?;
-        } else {
-            let samples = generate_singing_bowl(freq_info.hz, duration);
-            let path = dir.join(format!("meso_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
+        for _ in 0..num_segments.max(1) {
+            comparison.extend(self.generate_sine_wave(432.0, segment_duration));
+            comparison.extend(self.generate_sine_wave(440.0, segment_duration));
         }
+
+        self.save_mono_wav(&dir.join("tuning_432_440_comparison.wav"), &comparison)?;
+
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_hermetic_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("hermetic");
-    fs::create_dir_all(&dir).ok();
+    fn generate_om(&self) -> Result<(), hound::Error> {
+        fs::create_dir_all(&self.output_dir).ok();
 
-    println!("\n=== Generating Seven Hermetic Principles Frequencies ===");
-    for freq_info in HERMETIC_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("hermetic_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
+        println!("\n=== Generating Om Tone (136.1 Hz with harmonics) ===");
+        let samples = self.generate_om_tone(self.duration);
+        let path = self.output_dir.join("om_136.1hz.wav");
+        self.save_mono_wav(&path, &samples)?;
+
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_alchemy_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("alchemy");
-    fs::create_dir_all(&dir).ok();
+    fn generate_planetary_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("planetary");
+        fs::create_dir_all(&dir).ok();
 
-    println!("\n=== Generating Alchemy / Magnum Opus Frequencies ===");
-    for freq_info in ALCHEMY_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("alchemy_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_numerology_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("numerology");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Numerology Frequencies ===");
-    for freq_info in NUMEROLOGY_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("number_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_organ_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("organs");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Body / Organ Frequencies ===");
-    for freq_info in ORGAN_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("organ_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_meridian_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("meridians");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Meridian / TCM Frequencies ===");
-    for freq_info in MERIDIAN_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("meridian_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_ayurveda_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("ayurveda");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Ayurveda Frequencies ===");
-    for freq_info in AYURVEDA_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("ayurveda_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_sacred_sites_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("sacred_sites");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Sacred Sites Frequencies ===");
-    for freq_info in SACRED_SITES_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_singing_bowl(freq_info.hz, duration);
-        let path = dir.join(format!("site_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_emotional_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("emotional");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Emotional Release Frequencies ===");
-    for freq_info in EMOTIONAL_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("emotion_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
-
-fn generate_sleep_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("sleep");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Sleep / Dream Frequencies ===");
-    println!("(Binaural beats for low frequencies - use headphones!)");
-    for freq_info in SLEEP_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        if freq_info.hz < 20.0 {
-            let samples = generate_binaural_beat(100.0, freq_info.hz, duration);
-            let path = dir.join(format!("sleep_{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
-            save_stereo_wav(&path, &samples)?;
-        } else {
-            let samples = generate_sine_wave(freq_info.hz, duration);
-            let path = dir.join(format!("sleep_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
+        println!("\n=== Generating Planetary Frequencies (Cosmic Octave) ===");
+        for freq_info in PLANETARY_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("planet_{}_{:.2}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
         }
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_cognitive_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("cognitive");
-    fs::create_dir_all(&dir).ok();
+    fn generate_rife_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("rife");
+        fs::create_dir_all(&dir).ok();
 
-    println!("\n=== Generating Cognitive Enhancement Frequencies ===");
-    println!("(Binaural beats for brainwave frequencies - use headphones!)");
-    for freq_info in COGNITIVE_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        if freq_info.hz < 20.0 {
-            let samples = generate_binaural_beat(200.0, freq_info.hz, duration);
-            let path = dir.join(format!("cognitive_{}_{:.0}hz_binaural.wav", freq_info.name, freq_info.hz));
-            save_stereo_wav(&path, &samples)?;
-        } else if freq_info.hz <= 100.0 {
-            let samples = generate_isochronic_tone(200.0, freq_info.hz, duration);
-            let path = dir.join(format!("cognitive_{}_{:.0}hz_isochronic.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
-        } else {
-            let samples = generate_sine_wave(freq_info.hz, duration);
-            let path = dir.join(format!("cognitive_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
+        println!("\n=== Generating Rife Frequencies ===");
+        for freq_info in RIFE_FREQUENCIES {
+            println!("  {} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("rife_{}hz.wav", freq_info.hz as u32));
+            self.save_mono_wav(&path, &samples)?;
         }
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_circadian_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("circadian");
-    fs::create_dir_all(&dir).ok();
+    fn generate_sacred_math_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("sacred_math");
+        fs::create_dir_all(&dir).ok();
 
-    println!("\n=== Generating Circadian Rhythm Frequencies ===");
-    println!("(Binaural beats for low frequencies - use headphones!)");
-    for freq_info in CIRCADIAN_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        if freq_info.hz < 20.0 {
-            let samples = generate_binaural_beat(100.0, freq_info.hz, duration);
-            let path = dir.join(format!("circadian_{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
-            save_stereo_wav(&path, &samples)?;
-        } else {
-            let samples = generate_sine_wave(freq_info.hz, duration);
-            let path = dir.join(format!("circadian_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
+        println!("\n=== Generating Sacred Mathematics Frequencies ===");
+        for freq_info in SACRED_MATH_FREQUENCIES {
+            println!("  {} Hz: {}", freq_info.hz, freq_info.description);
+
+            // Use isochronic for very low frequencies (phi, pi, etc)
+            let samples = if freq_info.hz < 20.0 {
+                self.generate_isochronic_tone(200.0, freq_info.hz, self.duration)
+            } else {
+                self.generate_sine_wave(freq_info.hz, self.duration)
+            };
+
+            let path = dir.join(format!("{}_{:.3}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
         }
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_ancient_civ_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("ancient_civilizations");
-    fs::create_dir_all(&dir).ok();
+    fn generate_consciousness_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("consciousness");
+        fs::create_dir_all(&dir).ok();
 
-    println!("\n=== Generating Lemurian / Atlantean Frequencies ===");
-    for freq_info in ANCIENT_CIV_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("ancient_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
+        println!("\n=== Generating Consciousness Exploration Frequencies ===");
+        println!("(Binaural beats - use headphones!)");
 
-fn generate_divine_names_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("divine_names");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Divine Names / 72 Names of God Frequencies ===");
-    println!("(Binaural beats for gematria frequencies - use headphones!)");
-    for freq_info in DIVINE_NAMES_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        if freq_info.hz < 20.0 {
-            let samples = generate_binaural_beat(200.0, freq_info.hz, duration);
-            let path = dir.join(format!("divine_{}_{:.0}hz_binaural.wav", freq_info.name, freq_info.hz));
-            save_stereo_wav(&path, &samples)?;
-        } else {
-            let samples = generate_sine_wave(freq_info.hz, duration);
-            let path = dir.join(format!("divine_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
+        for freq_info in CONSCIOUSNESS_FREQUENCIES {
+            println!("  {} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_binaural_beat(200.0, freq_info.hz, self.duration);
+            let path = dir.join(format!("{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
+            self.save_stereo_wav(&path, &samples)?;
         }
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_kundalini_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("kundalini");
-    fs::create_dir_all(&dir).ok();
+    fn generate_singing_bowl_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("singing_bowls");
+        fs::create_dir_all(&dir).ok();
 
-    println!("\n=== Generating Kundalini Awakening Frequencies ===");
-    println!("(Binaural beats for low frequencies - use headphones!)");
-    for freq_info in KUNDALINI_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        if freq_info.hz < 20.0 {
-            let samples = generate_binaural_beat(200.0, freq_info.hz, duration);
-            let path = dir.join(format!("kundalini_{}_{:.0}hz_binaural.wav", freq_info.name, freq_info.hz));
-            save_stereo_wav(&path, &samples)?;
-        } else {
-            let samples = generate_sine_wave(freq_info.hz, duration);
-            let path = dir.join(format!("kundalini_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
+        println!("\n=== Generating Tibetan Singing Bowl Tones ===");
+        for freq_info in SINGING_BOWL_FREQUENCIES {
+            println!("  {} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("bowl_{}_{:.1}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
         }
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_shadow_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("shadow_work");
-    fs::create_dir_all(&dir).ok();
+    fn generate_zodiac_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("zodiac");
+        fs::create_dir_all(&dir).ok();
 
-    println!("\n=== Generating Shadow Work Frequencies ===");
-    println!("(Binaural beats for theta access - use headphones!)");
-    for freq_info in SHADOW_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        if freq_info.hz < 20.0 {
-            let samples = generate_binaural_beat(200.0, freq_info.hz, duration);
-            let path = dir.join(format!("shadow_{}_{:.0}hz_binaural.wav", freq_info.name, freq_info.hz));
-            save_stereo_wav(&path, &samples)?;
-        } else {
-            let samples = generate_sine_wave(freq_info.hz, duration);
-            let path = dir.join(format!("shadow_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
+        println!("\n=== Generating Zodiac Frequencies ===");
+        for freq_info in ZODIAC_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("zodiac_{}_{:.2}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
         }
+        Ok(())
     }
-    Ok(())
-}
 
-fn generate_polarity_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("polarity");
-    fs::create_dir_all(&dir).ok();
+    fn generate_monroe_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("monroe_focus");
+        fs::create_dir_all(&dir).ok();
 
-    println!("\n=== Generating Masculine / Feminine Polarity Frequencies ===");
-    for freq_info in POLARITY_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        let samples = generate_sine_wave(freq_info.hz, duration);
-        let path = dir.join(format!("polarity_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-        save_mono_wav(&path, &samples)?;
-    }
-    Ok(())
-}
+        println!("\n=== Generating Monroe Institute Focus Levels ===");
+        println!("(Binaural beats - use headphones!)");
 
-fn generate_nature_set(output_dir: &PathBuf, duration: f64) -> Result<(), hound::Error> {
-    let dir = output_dir.join("nature");
-    fs::create_dir_all(&dir).ok();
-
-    println!("\n=== Generating Nature / Weather Frequencies ===");
-    println!("(Binaural beats for Schumann resonance - use headphones!)");
-    for freq_info in NATURE_FREQUENCIES {
-        println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
-        if freq_info.hz < 20.0 {
-            let samples = generate_binaural_beat(100.0, freq_info.hz, duration);
-            let path = dir.join(format!("nature_{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
-            save_stereo_wav(&path, &samples)?;
-        } else {
-            let samples = generate_sine_wave(freq_info.hz, duration);
-            let path = dir.join(format!("nature_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
-            save_mono_wav(&path, &samples)?;
+        for freq_info in MONROE_FOCUS_LEVELS {
+            println!("  {} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_binaural_beat(100.0, freq_info.hz, self.duration);
+            let path = dir.join(format!("{}_binaural.wav", freq_info.name));
+            self.save_stereo_wav(&path, &samples)?;
         }
+        Ok(())
     }
-    Ok(())
+
+    fn generate_elemental_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("elements");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Elemental Frequencies ===");
+        for freq_info in ELEMENTAL_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("element_{}_{:.2}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_noise_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("noise");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Noise Backgrounds ===");
+
+        println!("  White noise (all frequencies equal)");
+        let samples = self.generate_white_noise(self.duration);
+        self.save_mono_wav(&dir.join("white_noise.wav"), &samples)?;
+
+        println!("  Pink noise (1/f, nature-like)");
+        let samples = self.generate_pink_noise(self.duration);
+        self.save_mono_wav(&dir.join("pink_noise.wav"), &samples)?;
+
+        println!("  Brown/Red noise (1/f², deep rumble)");
+        let samples = self.generate_brown_noise(self.duration);
+        self.save_mono_wav(&dir.join("brown_noise.wav"), &samples)?;
+
+        Ok(())
+    }
+
+    fn generate_frequency_sweep_file(&self, start: f64, end: f64) -> Result<(), hound::Error> {
+        fs::create_dir_all(&self.output_dir).ok();
+
+        println!("\n=== Generating Frequency Sweep {} Hz -> {} Hz ===", start, end);
+        let samples = self.generate_frequency_sweep(start, end, self.duration);
+        let path = self.output_dir.join(format!("sweep_{:.0}hz_to_{:.0}hz.wav", start, end));
+        self.save_mono_wav(&path, &samples)?;
+
+        Ok(())
+    }
+
+    fn generate_drone_file(&self, frequencies: &[f64]) -> Result<(), hound::Error> {
+        fs::create_dir_all(&self.output_dir).ok();
+
+        println!("\n=== Generating Ambient Drone ===");
+        println!("  Frequencies: {:?}", frequencies);
+        let samples = self.generate_drone(frequencies, self.duration);
+
+        let freq_str: Vec<String> = frequencies.iter().map(|f| format!("{:.0}", f)).collect();
+        let path = self.output_dir.join(format!("drone_{}.wav", freq_str.join("_")));
+        self.save_mono_wav(&path, &samples)?;
+
+        Ok(())
+    }
+
+    fn generate_archangel_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("archangels");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Archangel Frequencies ===");
+        for freq_info in ARCHANGEL_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("archangel_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_crystal_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("crystals");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Crystal Healing Frequencies ===");
+        for freq_info in CRYSTAL_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("crystal_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_sacred_geometry_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("sacred_geometry");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Sacred Geometry / Merkaba Frequencies ===");
+        for freq_info in SACRED_GEOMETRY_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("geometry_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_shamanic_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("shamanic");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Shamanic Journey Frequencies ===");
+        println!("(Binaural beats - use headphones!)");
+
+        for freq_info in SHAMANIC_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 20.0 {
+                let samples = self.generate_binaural_beat(200.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("shamanic_{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
+                self.save_stereo_wav(&path, &samples)?;
+            } else {
+                let samples = self.generate_isochronic_tone(freq_info.hz, 4.5, self.duration);
+                let path = dir.join(format!("shamanic_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn generate_dna_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("dna_activation");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating DNA Activation Frequencies ===");
+        for freq_info in DNA_ACTIVATION_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("dna_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_color_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("colors");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Color/Light Frequencies ===");
+        for freq_info in COLOR_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("color_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_egyptian_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("egyptian");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Egyptian / Pyramid Frequencies ===");
+        for freq_info in EGYPTIAN_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("egypt_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_moon_phase_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("moon_phases");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Moon Phase Frequencies ===");
+        for freq_info in MOON_PHASE_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("moon_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_ascended_master_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("ascended_masters");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Ascended Master Frequencies ===");
+        for freq_info in ASCENDED_MASTER_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("master_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_starseed_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("starseeds");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Starseed / ET Frequencies ===");
+        for freq_info in STARSEED_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("starseed_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_tarot_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("tarot");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Tarot Major Arcana Frequencies ===");
+        for freq_info in TAROT_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 1.0 {
+                continue;
+            }
+            let samples = if freq_info.hz < 20.0 {
+                self.generate_isochronic_tone(200.0, freq_info.hz, self.duration)
+            } else {
+                self.generate_sine_wave(freq_info.hz, self.duration)
+            };
+            let path = dir.join(format!("tarot_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_enochian_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("enochian");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Enochian / Ceremonial Magic Frequencies ===");
+        for freq_info in ENOCHIAN_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("enochian_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_reiki_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("reiki");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Reiki Symbol Frequencies ===");
+        for freq_info in REIKI_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("reiki_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_intention_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("intentions");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Intention / Affirmation Frequencies ===");
+        for freq_info in INTENTION_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("intention_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_norse_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("norse");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Norse / Viking Frequencies ===");
+        for freq_info in NORSE_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("norse_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_greek_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("greek");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Greek / Olympian Frequencies ===");
+        for freq_info in GREEK_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("greek_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_hindu_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("hindu");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Hindu Mantra / Deity Frequencies ===");
+        for freq_info in HINDU_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("hindu_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_buddhist_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("buddhist");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Buddhist Frequencies ===");
+        for freq_info in BUDDHIST_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("buddhist_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_celtic_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("celtic");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Celtic / Druid Frequencies ===");
+        for freq_info in CELTIC_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("celtic_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_kabbalah_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("kabbalah");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Kabbalah / Tree of Life Frequencies ===");
+        for freq_info in KABBALAH_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("kabbalah_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_orisha_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("orisha");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Yoruba / Orisha Frequencies ===");
+        for freq_info in ORISHA_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("orisha_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_vodou_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("vodou");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Vodou / Lwa Frequencies ===");
+        for freq_info in VODOU_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("vodou_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_angelic_hierarchy_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("angelic_hierarchy");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Angelic Hierarchy (Nine Choirs) Frequencies ===");
+        for freq_info in ANGELIC_HIERARCHY_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("choir_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_goetia_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("goetia");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Goetia / Solomonic Frequencies ===");
+        println!("(For study and banishing work)");
+        for freq_info in GOETIA_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("goetia_{}_{:.1}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_psychic_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("psychic");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Psychic Ability Frequencies ===");
+        println!("(Binaural beats for low frequencies - use headphones!)");
+        for freq_info in PSYCHIC_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 20.0 {
+                let samples = self.generate_binaural_beat(200.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("psychic_{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
+                self.save_stereo_wav(&path, &samples)?;
+            } else {
+                let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+                let path = dir.join(format!("psychic_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn generate_akashic_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("akashic");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Akashic Records / Past Life Frequencies ===");
+        println!("(Binaural beats for low frequencies - use headphones!)");
+        for freq_info in AKASHIC_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 20.0 {
+                let samples = self.generate_binaural_beat(200.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("akashic_{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
+                self.save_stereo_wav(&path, &samples)?;
+            } else {
+                let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+                let path = dir.join(format!("akashic_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn generate_protection_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("protection");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Protection / Banishing Frequencies ===");
+        for freq_info in PROTECTION_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("protection_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_animal_totem_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("animal_totems");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Animal Totem / Spirit Animal Frequencies ===");
+        for freq_info in ANIMAL_TOTEM_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("totem_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_fae_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("fae");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Fairy / Elemental Being Frequencies ===");
+        for freq_info in FAE_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("fae_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_abundance_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("abundance");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Abundance / Wealth Frequencies ===");
+        for freq_info in ABUNDANCE_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("abundance_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_love_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("love");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Love / Relationship Frequencies ===");
+        for freq_info in LOVE_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("love_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_dimension_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("dimensions");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Dimensional / Reality Shifting Frequencies ===");
+        println!("(Binaural beats for low frequencies - use headphones!)");
+        for freq_info in DIMENSION_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 20.0 {
+                let samples = self.generate_binaural_beat(200.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("dimension_{}_{:.0}hz_binaural.wav", freq_info.name, freq_info.hz));
+                self.save_stereo_wav(&path, &samples)?;
+            } else {
+                let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+                let path = dir.join(format!("dimension_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn generate_aura_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("aura");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Aura Layer Frequencies ===");
+        for freq_info in AURA_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("aura_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_chinese_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("chinese");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Chinese / Taoist Frequencies ===");
+        for freq_info in CHINESE_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("chinese_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_shinto_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("shinto");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Japanese / Shinto Frequencies ===");
+        for freq_info in SHINTO_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("shinto_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_sumerian_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("sumerian");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Sumerian / Mesopotamian Frequencies ===");
+        for freq_info in SUMERIAN_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("sumerian_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_mesoamerican_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("mesoamerican");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Mayan / Aztec Frequencies ===");
+        println!("(Binaural beats for calendar frequencies - use headphones!)");
+        for freq_info in MESOAMERICAN_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 20.0 {
+                let samples = self.generate_binaural_beat(200.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("meso_{}_{:.0}hz_binaural.wav", freq_info.name, freq_info.hz));
+                self.save_stereo_wav(&path, &samples)?;
+            } else {
+                let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+                let path = dir.join(format!("meso_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn generate_hermetic_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("hermetic");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Seven Hermetic Principles Frequencies ===");
+        for freq_info in HERMETIC_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("hermetic_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_alchemy_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("alchemy");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Alchemy / Magnum Opus Frequencies ===");
+        for freq_info in ALCHEMY_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("alchemy_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_numerology_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("numerology");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Numerology Frequencies ===");
+        for freq_info in NUMEROLOGY_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("number_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_organ_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("organs");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Body / Organ Frequencies ===");
+        for freq_info in ORGAN_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("organ_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_meridian_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("meridians");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Meridian / TCM Frequencies ===");
+        for freq_info in MERIDIAN_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("meridian_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_ayurveda_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("ayurveda");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Ayurveda Frequencies ===");
+        for freq_info in AYURVEDA_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("ayurveda_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_sacred_sites_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("sacred_sites");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Sacred Sites Frequencies ===");
+        for freq_info in SACRED_SITES_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_singing_bowl(freq_info.hz, self.duration);
+            let path = dir.join(format!("site_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_emotional_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("emotional");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Emotional Release Frequencies ===");
+        for freq_info in EMOTIONAL_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("emotion_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_sleep_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("sleep");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Sleep / Dream Frequencies ===");
+        println!("(Binaural beats for low frequencies - use headphones!)");
+        for freq_info in SLEEP_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 20.0 {
+                let samples = self.generate_binaural_beat(100.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("sleep_{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
+                self.save_stereo_wav(&path, &samples)?;
+            } else {
+                let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+                let path = dir.join(format!("sleep_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn generate_cognitive_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("cognitive");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Cognitive Enhancement Frequencies ===");
+        println!("(Binaural beats for brainwave frequencies - use headphones!)");
+        for freq_info in COGNITIVE_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 20.0 {
+                let samples = self.generate_binaural_beat(200.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("cognitive_{}_{:.0}hz_binaural.wav", freq_info.name, freq_info.hz));
+                self.save_stereo_wav(&path, &samples)?;
+            } else if freq_info.hz <= 100.0 {
+                let samples = self.generate_isochronic_tone(200.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("cognitive_{}_{:.0}hz_isochronic.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            } else {
+                let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+                let path = dir.join(format!("cognitive_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn generate_circadian_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("circadian");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Circadian Rhythm Frequencies ===");
+        println!("(Binaural beats for low frequencies - use headphones!)");
+        for freq_info in CIRCADIAN_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 20.0 {
+                let samples = self.generate_binaural_beat(100.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("circadian_{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
+                self.save_stereo_wav(&path, &samples)?;
+            } else {
+                let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+                let path = dir.join(format!("circadian_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn generate_ancient_civ_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("ancient_civilizations");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Lemurian / Atlantean Frequencies ===");
+        for freq_info in ANCIENT_CIV_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("ancient_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_divine_names_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("divine_names");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Divine Names / 72 Names of God Frequencies ===");
+        println!("(Binaural beats for gematria frequencies - use headphones!)");
+        for freq_info in DIVINE_NAMES_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 20.0 {
+                let samples = self.generate_binaural_beat(200.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("divine_{}_{:.0}hz_binaural.wav", freq_info.name, freq_info.hz));
+                self.save_stereo_wav(&path, &samples)?;
+            } else {
+                let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+                let path = dir.join(format!("divine_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn generate_kundalini_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("kundalini");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Kundalini Awakening Frequencies ===");
+        println!("(Binaural beats for low frequencies - use headphones!)");
+        for freq_info in KUNDALINI_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 20.0 {
+                let samples = self.generate_binaural_beat(200.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("kundalini_{}_{:.0}hz_binaural.wav", freq_info.name, freq_info.hz));
+                self.save_stereo_wav(&path, &samples)?;
+            } else {
+                let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+                let path = dir.join(format!("kundalini_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn generate_shadow_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("shadow_work");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Shadow Work Frequencies ===");
+        println!("(Binaural beats for theta access - use headphones!)");
+        for freq_info in SHADOW_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 20.0 {
+                let samples = self.generate_binaural_beat(200.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("shadow_{}_{:.0}hz_binaural.wav", freq_info.name, freq_info.hz));
+                self.save_stereo_wav(&path, &samples)?;
+            } else {
+                let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+                let path = dir.join(format!("shadow_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn generate_polarity_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("polarity");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Masculine / Feminine Polarity Frequencies ===");
+        for freq_info in POLARITY_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+            let path = dir.join(format!("polarity_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+            self.save_mono_wav(&path, &samples)?;
+        }
+        Ok(())
+    }
+
+    fn generate_nature_set(&self) -> Result<(), hound::Error> {
+        let dir = self.output_dir.join("nature");
+        fs::create_dir_all(&dir).ok();
+
+        println!("\n=== Generating Nature / Weather Frequencies ===");
+        println!("(Binaural beats for Schumann resonance - use headphones!)");
+        for freq_info in NATURE_FREQUENCIES {
+            println!("  {:.2} Hz: {}", freq_info.hz, freq_info.description);
+            if freq_info.hz < 20.0 {
+                let samples = self.generate_binaural_beat(100.0, freq_info.hz, self.duration);
+                let path = dir.join(format!("nature_{}_{:.1}hz_binaural.wav", freq_info.name, freq_info.hz));
+                self.save_stereo_wav(&path, &samples)?;
+            } else {
+                let samples = self.generate_sine_wave(freq_info.hz, self.duration);
+                let path = dir.join(format!("nature_{}_{:.0}hz.wav", freq_info.name, freq_info.hz));
+                self.save_mono_wav(&path, &samples)?;
+            }
+        }
+        Ok(())
+    }
+} // End of impl AudioGenerator
+
+/// Convert a normalized f64 sample (-1.0 to 1.0) to the appropriate integer format
+fn convert_sample_i16(sample: f64) -> i16 {
+    (sample * i16::MAX as f64) as i16
+}
+
+fn convert_sample_i32_24bit(sample: f64) -> i32 {
+    // 24-bit uses values up to 2^23 - 1
+    (sample * 8388607.0) as i32
+}
+
+fn convert_sample_i32(sample: f64) -> i32 {
+    (sample * i32::MAX as f64) as i32
 }
 
 // =============================================================================
@@ -2672,6 +2758,14 @@ struct Cli {
     /// Duration in seconds
     #[arg(short, long, default_value = "60")]
     duration: f64,
+
+    /// Sample rate in Hz (44100, 48000, 96000, 192000)
+    #[arg(short, long, default_value = "44100")]
+    sample_rate: u32,
+
+    /// Bit depth (16, 24, or 32)
+    #[arg(short, long, default_value = "16")]
+    bit_depth: u16,
 }
 
 #[derive(Subcommand)]
@@ -3290,413 +3384,426 @@ fn print_frequency_list() {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
 
+    // Create audio config from CLI arguments
+    let config = AudioConfig {
+        sample_rate: cli.sample_rate,
+        bit_depth: cli.bit_depth,
+    };
+
+    // Create audio generator with config, output directory, and duration
+    let mut gen = AudioGenerator::new(cli.output.clone(), cli.duration, config);
+
     match cli.command {
         Commands::List => {
             print_frequency_list();
         }
 
         Commands::All => {
-            generate_solfeggio_set(&cli.output, cli.duration)?;
-            generate_angel_set(&cli.output, cli.duration)?;
-            generate_binaural_set(&cli.output, cli.duration.min(300.0), 200.0)?;
-            generate_schumann(&cli.output, cli.duration.min(300.0))?;
-            generate_tuning_comparison(&cli.output, 30.0)?;
-            generate_chakra_meditation(&cli.output, cli.duration)?;
-            generate_om(&cli.output, cli.duration)?;
-            generate_planetary_set(&cli.output, cli.duration)?;
-            generate_rife_set(&cli.output, cli.duration)?;
-            generate_sacred_math_set(&cli.output, cli.duration)?;
-            generate_consciousness_set(&cli.output, cli.duration)?;
-            generate_singing_bowl_set(&cli.output, cli.duration)?;
-            generate_zodiac_set(&cli.output, cli.duration)?;
-            generate_monroe_set(&cli.output, cli.duration)?;
-            generate_elemental_set(&cli.output, cli.duration)?;
-            generate_archangel_set(&cli.output, cli.duration)?;
-            generate_crystal_set(&cli.output, cli.duration)?;
-            generate_sacred_geometry_set(&cli.output, cli.duration)?;
-            generate_shamanic_set(&cli.output, cli.duration)?;
-            generate_dna_set(&cli.output, cli.duration)?;
-            generate_color_set(&cli.output, cli.duration)?;
-            generate_egyptian_set(&cli.output, cli.duration)?;
-            generate_moon_phase_set(&cli.output, cli.duration)?;
-            generate_ascended_master_set(&cli.output, cli.duration)?;
-            generate_starseed_set(&cli.output, cli.duration)?;
-            generate_tarot_set(&cli.output, cli.duration)?;
-            generate_enochian_set(&cli.output, cli.duration)?;
-            generate_reiki_set(&cli.output, cli.duration)?;
-            generate_intention_set(&cli.output, cli.duration)?;
-            generate_norse_set(&cli.output, cli.duration)?;
-            generate_greek_set(&cli.output, cli.duration)?;
-            generate_hindu_set(&cli.output, cli.duration)?;
-            generate_buddhist_set(&cli.output, cli.duration)?;
-            generate_celtic_set(&cli.output, cli.duration)?;
-            generate_kabbalah_set(&cli.output, cli.duration)?;
-            generate_orisha_set(&cli.output, cli.duration)?;
-            generate_vodou_set(&cli.output, cli.duration)?;
-            generate_angelic_hierarchy_set(&cli.output, cli.duration)?;
-            generate_goetia_set(&cli.output, cli.duration)?;
-            generate_psychic_set(&cli.output, cli.duration)?;
-            generate_akashic_set(&cli.output, cli.duration)?;
-            generate_protection_set(&cli.output, cli.duration)?;
-            generate_animal_totem_set(&cli.output, cli.duration)?;
-            generate_fae_set(&cli.output, cli.duration)?;
-            generate_abundance_set(&cli.output, cli.duration)?;
-            generate_love_set(&cli.output, cli.duration)?;
-            generate_dimension_set(&cli.output, cli.duration)?;
-            generate_aura_set(&cli.output, cli.duration)?;
-            generate_chinese_set(&cli.output, cli.duration)?;
-            generate_shinto_set(&cli.output, cli.duration)?;
-            generate_sumerian_set(&cli.output, cli.duration)?;
-            generate_mesoamerican_set(&cli.output, cli.duration)?;
-            generate_hermetic_set(&cli.output, cli.duration)?;
-            generate_alchemy_set(&cli.output, cli.duration)?;
-            generate_numerology_set(&cli.output, cli.duration)?;
-            generate_organ_set(&cli.output, cli.duration)?;
-            generate_meridian_set(&cli.output, cli.duration)?;
-            generate_ayurveda_set(&cli.output, cli.duration)?;
-            generate_sacred_sites_set(&cli.output, cli.duration)?;
-            generate_emotional_set(&cli.output, cli.duration)?;
-            generate_sleep_set(&cli.output, cli.duration)?;
-            generate_cognitive_set(&cli.output, cli.duration)?;
-            generate_circadian_set(&cli.output, cli.duration)?;
-            generate_ancient_civ_set(&cli.output, cli.duration)?;
-            generate_divine_names_set(&cli.output, cli.duration)?;
-            generate_kundalini_set(&cli.output, cli.duration)?;
-            generate_shadow_set(&cli.output, cli.duration)?;
-            generate_polarity_set(&cli.output, cli.duration)?;
-            generate_nature_set(&cli.output, cli.duration)?;
-            generate_noise_set(&cli.output, cli.duration)?;
+            gen.generate_solfeggio_set()?;
+            gen.generate_angel_set()?;
+            // Use shorter duration for binaural and schumann
+            let original_duration = gen.duration;
+            gen.duration = gen.duration.min(300.0);
+            gen.generate_binaural_set(200.0)?;
+            gen.generate_schumann()?;
+            gen.duration = original_duration;
+            gen.generate_tuning_comparison()?;
+            gen.generate_chakra_meditation()?;
+            gen.generate_om()?;
+            gen.generate_planetary_set()?;
+            gen.generate_rife_set()?;
+            gen.generate_sacred_math_set()?;
+            gen.generate_consciousness_set()?;
+            gen.generate_singing_bowl_set()?;
+            gen.generate_zodiac_set()?;
+            gen.generate_monroe_set()?;
+            gen.generate_elemental_set()?;
+            gen.generate_archangel_set()?;
+            gen.generate_crystal_set()?;
+            gen.generate_sacred_geometry_set()?;
+            gen.generate_shamanic_set()?;
+            gen.generate_dna_set()?;
+            gen.generate_color_set()?;
+            gen.generate_egyptian_set()?;
+            gen.generate_moon_phase_set()?;
+            gen.generate_ascended_master_set()?;
+            gen.generate_starseed_set()?;
+            gen.generate_tarot_set()?;
+            gen.generate_enochian_set()?;
+            gen.generate_reiki_set()?;
+            gen.generate_intention_set()?;
+            gen.generate_norse_set()?;
+            gen.generate_greek_set()?;
+            gen.generate_hindu_set()?;
+            gen.generate_buddhist_set()?;
+            gen.generate_celtic_set()?;
+            gen.generate_kabbalah_set()?;
+            gen.generate_orisha_set()?;
+            gen.generate_vodou_set()?;
+            gen.generate_angelic_hierarchy_set()?;
+            gen.generate_goetia_set()?;
+            gen.generate_psychic_set()?;
+            gen.generate_akashic_set()?;
+            gen.generate_protection_set()?;
+            gen.generate_animal_totem_set()?;
+            gen.generate_fae_set()?;
+            gen.generate_abundance_set()?;
+            gen.generate_love_set()?;
+            gen.generate_dimension_set()?;
+            gen.generate_aura_set()?;
+            gen.generate_chinese_set()?;
+            gen.generate_shinto_set()?;
+            gen.generate_sumerian_set()?;
+            gen.generate_mesoamerican_set()?;
+            gen.generate_hermetic_set()?;
+            gen.generate_alchemy_set()?;
+            gen.generate_numerology_set()?;
+            gen.generate_organ_set()?;
+            gen.generate_meridian_set()?;
+            gen.generate_ayurveda_set()?;
+            gen.generate_sacred_sites_set()?;
+            gen.generate_emotional_set()?;
+            gen.generate_sleep_set()?;
+            gen.generate_cognitive_set()?;
+            gen.generate_circadian_set()?;
+            gen.generate_ancient_civ_set()?;
+            gen.generate_divine_names_set()?;
+            gen.generate_kundalini_set()?;
+            gen.generate_shadow_set()?;
+            gen.generate_polarity_set()?;
+            gen.generate_nature_set()?;
+            gen.generate_noise_set()?;
             println!("\nAll frequencies generated!");
         }
 
         Commands::Solfeggio => {
-            generate_solfeggio_set(&cli.output, cli.duration)?;
+            gen.generate_solfeggio_set()?;
         }
 
         Commands::Angels => {
-            generate_angel_set(&cli.output, cli.duration)?;
+            gen.generate_angel_set()?;
         }
 
         Commands::Binaural { base } => {
-            generate_binaural_set(&cli.output, cli.duration, base)?;
+            gen.generate_binaural_set(base)?;
         }
 
         Commands::Schumann => {
-            generate_schumann(&cli.output, cli.duration)?;
+            gen.generate_schumann()?;
         }
 
         Commands::Chakras => {
-            generate_chakra_meditation(&cli.output, cli.duration)?;
+            gen.generate_chakra_meditation()?;
         }
 
         Commands::Tuning => {
-            generate_tuning_comparison(&cli.output, cli.duration)?;
+            gen.generate_tuning_comparison()?;
         }
 
         Commands::Om => {
-            generate_om(&cli.output, cli.duration)?;
+            gen.generate_om()?;
         }
 
         Commands::Planets => {
-            generate_planetary_set(&cli.output, cli.duration)?;
+            gen.generate_planetary_set()?;
         }
 
         Commands::Rife => {
-            generate_rife_set(&cli.output, cli.duration)?;
+            gen.generate_rife_set()?;
         }
 
         Commands::Sacred => {
-            generate_sacred_math_set(&cli.output, cli.duration)?;
+            gen.generate_sacred_math_set()?;
         }
 
         Commands::Consciousness => {
-            generate_consciousness_set(&cli.output, cli.duration)?;
+            gen.generate_consciousness_set()?;
         }
 
         Commands::Bowls => {
-            generate_singing_bowl_set(&cli.output, cli.duration)?;
+            gen.generate_singing_bowl_set()?;
         }
 
         Commands::Zodiac => {
-            generate_zodiac_set(&cli.output, cli.duration)?;
+            gen.generate_zodiac_set()?;
         }
 
         Commands::Monroe => {
-            generate_monroe_set(&cli.output, cli.duration)?;
+            gen.generate_monroe_set()?;
         }
 
         Commands::Elements => {
-            generate_elemental_set(&cli.output, cli.duration)?;
+            gen.generate_elemental_set()?;
         }
 
         Commands::Archangels => {
-            generate_archangel_set(&cli.output, cli.duration)?;
+            gen.generate_archangel_set()?;
         }
 
         Commands::Crystals => {
-            generate_crystal_set(&cli.output, cli.duration)?;
+            gen.generate_crystal_set()?;
         }
 
         Commands::Geometry => {
-            generate_sacred_geometry_set(&cli.output, cli.duration)?;
+            gen.generate_sacred_geometry_set()?;
         }
 
         Commands::Shamanic => {
-            generate_shamanic_set(&cli.output, cli.duration)?;
+            gen.generate_shamanic_set()?;
         }
 
         Commands::Dna => {
-            generate_dna_set(&cli.output, cli.duration)?;
+            gen.generate_dna_set()?;
         }
 
         Commands::Colors => {
-            generate_color_set(&cli.output, cli.duration)?;
+            gen.generate_color_set()?;
         }
 
         Commands::Egyptian => {
-            generate_egyptian_set(&cli.output, cli.duration)?;
+            gen.generate_egyptian_set()?;
         }
 
         Commands::Moon => {
-            generate_moon_phase_set(&cli.output, cli.duration)?;
+            gen.generate_moon_phase_set()?;
         }
 
         Commands::Masters => {
-            generate_ascended_master_set(&cli.output, cli.duration)?;
+            gen.generate_ascended_master_set()?;
         }
 
         Commands::Starseeds => {
-            generate_starseed_set(&cli.output, cli.duration)?;
+            gen.generate_starseed_set()?;
         }
 
         Commands::Tarot => {
-            generate_tarot_set(&cli.output, cli.duration)?;
+            gen.generate_tarot_set()?;
         }
 
         Commands::Enochian => {
-            generate_enochian_set(&cli.output, cli.duration)?;
+            gen.generate_enochian_set()?;
         }
 
         Commands::Reiki => {
-            generate_reiki_set(&cli.output, cli.duration)?;
+            gen.generate_reiki_set()?;
         }
 
         Commands::Intentions => {
-            generate_intention_set(&cli.output, cli.duration)?;
+            gen.generate_intention_set()?;
         }
 
         Commands::Norse => {
-            generate_norse_set(&cli.output, cli.duration)?;
+            gen.generate_norse_set()?;
         }
 
         Commands::Greek => {
-            generate_greek_set(&cli.output, cli.duration)?;
+            gen.generate_greek_set()?;
         }
 
         Commands::Hindu => {
-            generate_hindu_set(&cli.output, cli.duration)?;
+            gen.generate_hindu_set()?;
         }
 
         Commands::Buddhist => {
-            generate_buddhist_set(&cli.output, cli.duration)?;
+            gen.generate_buddhist_set()?;
         }
 
         Commands::Celtic => {
-            generate_celtic_set(&cli.output, cli.duration)?;
+            gen.generate_celtic_set()?;
         }
 
         Commands::Kabbalah => {
-            generate_kabbalah_set(&cli.output, cli.duration)?;
+            gen.generate_kabbalah_set()?;
         }
 
         Commands::Orisha => {
-            generate_orisha_set(&cli.output, cli.duration)?;
+            gen.generate_orisha_set()?;
         }
 
         Commands::Vodou => {
-            generate_vodou_set(&cli.output, cli.duration)?;
+            gen.generate_vodou_set()?;
         }
 
         Commands::AngelicHierarchy => {
-            generate_angelic_hierarchy_set(&cli.output, cli.duration)?;
+            gen.generate_angelic_hierarchy_set()?;
         }
 
         Commands::Goetia => {
-            generate_goetia_set(&cli.output, cli.duration)?;
+            gen.generate_goetia_set()?;
         }
 
         Commands::Psychic => {
-            generate_psychic_set(&cli.output, cli.duration)?;
+            gen.generate_psychic_set()?;
         }
 
         Commands::Akashic => {
-            generate_akashic_set(&cli.output, cli.duration)?;
+            gen.generate_akashic_set()?;
         }
 
         Commands::Protection => {
-            generate_protection_set(&cli.output, cli.duration)?;
+            gen.generate_protection_set()?;
         }
 
         Commands::Totems => {
-            generate_animal_totem_set(&cli.output, cli.duration)?;
+            gen.generate_animal_totem_set()?;
         }
 
         Commands::Fae => {
-            generate_fae_set(&cli.output, cli.duration)?;
+            gen.generate_fae_set()?;
         }
 
         Commands::Abundance => {
-            generate_abundance_set(&cli.output, cli.duration)?;
+            gen.generate_abundance_set()?;
         }
 
         Commands::Love => {
-            generate_love_set(&cli.output, cli.duration)?;
+            gen.generate_love_set()?;
         }
 
         Commands::Dimensions => {
-            generate_dimension_set(&cli.output, cli.duration)?;
+            gen.generate_dimension_set()?;
         }
 
         Commands::Aura => {
-            generate_aura_set(&cli.output, cli.duration)?;
+            gen.generate_aura_set()?;
         }
 
         Commands::Chinese => {
-            generate_chinese_set(&cli.output, cli.duration)?;
+            gen.generate_chinese_set()?;
         }
 
         Commands::Shinto => {
-            generate_shinto_set(&cli.output, cli.duration)?;
+            gen.generate_shinto_set()?;
         }
 
         Commands::Sumerian => {
-            generate_sumerian_set(&cli.output, cli.duration)?;
+            gen.generate_sumerian_set()?;
         }
 
         Commands::Mesoamerican => {
-            generate_mesoamerican_set(&cli.output, cli.duration)?;
+            gen.generate_mesoamerican_set()?;
         }
 
         Commands::Hermetic => {
-            generate_hermetic_set(&cli.output, cli.duration)?;
+            gen.generate_hermetic_set()?;
         }
 
         Commands::Alchemy => {
-            generate_alchemy_set(&cli.output, cli.duration)?;
+            gen.generate_alchemy_set()?;
         }
 
         Commands::Numerology => {
-            generate_numerology_set(&cli.output, cli.duration)?;
+            gen.generate_numerology_set()?;
         }
 
         Commands::Organs => {
-            generate_organ_set(&cli.output, cli.duration)?;
+            gen.generate_organ_set()?;
         }
 
         Commands::Meridians => {
-            generate_meridian_set(&cli.output, cli.duration)?;
+            gen.generate_meridian_set()?;
         }
 
         Commands::Ayurveda => {
-            generate_ayurveda_set(&cli.output, cli.duration)?;
+            gen.generate_ayurveda_set()?;
         }
 
         Commands::SacredSites => {
-            generate_sacred_sites_set(&cli.output, cli.duration)?;
+            gen.generate_sacred_sites_set()?;
         }
 
         Commands::Emotional => {
-            generate_emotional_set(&cli.output, cli.duration)?;
+            gen.generate_emotional_set()?;
         }
 
         Commands::Sleep => {
-            generate_sleep_set(&cli.output, cli.duration)?;
+            gen.generate_sleep_set()?;
         }
 
         Commands::Cognitive => {
-            generate_cognitive_set(&cli.output, cli.duration)?;
+            gen.generate_cognitive_set()?;
         }
 
         Commands::Circadian => {
-            generate_circadian_set(&cli.output, cli.duration)?;
+            gen.generate_circadian_set()?;
         }
 
         Commands::AncientCiv => {
-            generate_ancient_civ_set(&cli.output, cli.duration)?;
+            gen.generate_ancient_civ_set()?;
         }
 
         Commands::DivineNames => {
-            generate_divine_names_set(&cli.output, cli.duration)?;
+            gen.generate_divine_names_set()?;
         }
 
         Commands::Kundalini => {
-            generate_kundalini_set(&cli.output, cli.duration)?;
+            gen.generate_kundalini_set()?;
         }
 
         Commands::Shadow => {
-            generate_shadow_set(&cli.output, cli.duration)?;
+            gen.generate_shadow_set()?;
         }
 
         Commands::Polarity => {
-            generate_polarity_set(&cli.output, cli.duration)?;
+            gen.generate_polarity_set()?;
         }
 
         Commands::Nature => {
-            generate_nature_set(&cli.output, cli.duration)?;
+            gen.generate_nature_set()?;
         }
 
         Commands::Noise => {
-            generate_noise_set(&cli.output, cli.duration)?;
+            gen.generate_noise_set()?;
         }
 
         Commands::Sweep { start, end } => {
-            generate_frequency_sweep_file(&cli.output, start, end, cli.duration)?;
+            gen.generate_frequency_sweep_file(start, end)?;
         }
 
         Commands::Drone { frequencies } => {
-            generate_drone_file(&cli.output, &frequencies, cli.duration)?;
+            gen.generate_drone_file(&frequencies)?;
         }
 
         Commands::Bowl { frequency } => {
-            fs::create_dir_all(&cli.output).ok();
+            fs::create_dir_all(&gen.output_dir).ok();
             println!("\n=== Generating Singing Bowl at {} Hz ===", frequency);
-            let samples = generate_singing_bowl(frequency, cli.duration);
-            let path = cli.output.join(format!("bowl_{:.1}hz.wav", frequency));
-            save_mono_wav(&path, &samples)?;
+            let samples = gen.generate_singing_bowl(frequency, gen.duration);
+            let path = gen.output_dir.join(format!("bowl_{:.1}hz.wav", frequency));
+            gen.save_mono_wav(&path, &samples)?;
         }
 
         Commands::Custom { frequency, mode } => {
-            fs::create_dir_all(&cli.output).ok();
+            fs::create_dir_all(&gen.output_dir).ok();
             println!("\n=== Generating Custom Frequency: {} Hz ===", frequency);
 
             match mode {
                 GenerationMode::Sine => {
-                    let samples = generate_sine_wave(frequency, cli.duration);
-                    let path = cli.output.join(format!("custom_{:.1}hz_sine.wav", frequency));
-                    save_mono_wav(&path, &samples)?;
+                    let samples = gen.generate_sine_wave(frequency, gen.duration);
+                    let path = gen.output_dir.join(format!("custom_{:.1}hz_sine.wav", frequency));
+                    gen.save_mono_wav(&path, &samples)?;
                 }
                 GenerationMode::Binaural => {
-                    let samples = generate_binaural_beat(200.0, frequency, cli.duration);
-                    let path = cli.output.join(format!("custom_{:.1}hz_binaural.wav", frequency));
-                    save_stereo_wav(&path, &samples)?;
+                    let samples = gen.generate_binaural_beat(200.0, frequency, gen.duration);
+                    let path = gen.output_dir.join(format!("custom_{:.1}hz_binaural.wav", frequency));
+                    gen.save_stereo_wav(&path, &samples)?;
                 }
                 GenerationMode::Isochronic => {
-                    let samples = generate_isochronic_tone(200.0, frequency, cli.duration);
-                    let path = cli.output.join(format!("custom_{:.1}hz_isochronic.wav", frequency));
-                    save_mono_wav(&path, &samples)?;
+                    let samples = gen.generate_isochronic_tone(200.0, frequency, gen.duration);
+                    let path = gen.output_dir.join(format!("custom_{:.1}hz_isochronic.wav", frequency));
+                    gen.save_mono_wav(&path, &samples)?;
                 }
             }
         }
 
         Commands::Layer { frequencies } => {
-            fs::create_dir_all(&cli.output).ok();
+            fs::create_dir_all(&gen.output_dir).ok();
             println!("\n=== Generating Layered Frequencies ===");
             println!("  Frequencies: {:?}", frequencies);
 
-            let samples = generate_layered_frequencies(&frequencies, cli.duration);
+            let samples = gen.generate_layered_frequencies(&frequencies, gen.duration);
             let freq_str: Vec<String> = frequencies.iter().map(|f| format!("{:.0}", f)).collect();
-            let path = cli.output.join(format!("layered_{}.wav", freq_str.join("_")));
-            save_mono_wav(&path, &samples)?;
+            let path = gen.output_dir.join(format!("layered_{}.wav", freq_str.join("_")));
+            gen.save_mono_wav(&path, &samples)?;
         }
     }
 
