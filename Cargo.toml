@@ -1,0 +1,9 @@
+[package]
+name = "spirit"
+version = "0.1.0"
+edition = "2021"
+description = "Generate alternative/fringe frequency audio files for experimentation"
+
+[dependencies]
+hound = "3.5"
+clap = { version = "4", features = ["derive"] }
