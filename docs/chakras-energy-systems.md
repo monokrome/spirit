@@ -26,7 +26,7 @@ The chakra system describes seven main energy centers along the spine, each asso
 | 852 Hz | Third Eye | Ajna | Between eyebrows | Intuition, insight, perception |
 | 963 Hz | Crown | Sahasrara | Top of head | Spirituality, consciousness, unity |
 
-**Alternative frequencies** (based on other systems):
+**Other frequency systems**:
 - 256 Hz (Root) to 480 Hz (Crown) - based on octave relationships
 - 194.18 Hz (Root) - based on planetary frequencies
 

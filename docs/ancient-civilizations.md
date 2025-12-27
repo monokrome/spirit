@@ -166,7 +166,7 @@ Mainstream archaeology explains most sites through:
 - Labor mobilization by organized societies
 - Spiritual/ceremonial motivation
 
-Alternative theories proposing advanced lost civilizations remain outside academic consensus.
+Theories proposing advanced lost civilizations remain outside academic consensus.
 
 ---
 

@@ -9,7 +9,7 @@ use crate::generator::GenerationMode;
 
 #[derive(Parser)]
 #[command(name = "spirit")]
-#[command(about = "Generate alternative/fringe frequency audio files for experimentation")]
+#[command(about = "Generate frequency-based audio files for meditation and exploration")]
 #[command(version)]
 pub struct Cli {
     #[command(subcommand)]

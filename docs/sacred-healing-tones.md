@@ -13,15 +13,15 @@ Ancient and modern frequency systems associated with spiritual and healing tradi
 
 ## Solfeggio Frequencies
 
-A set of frequencies derived from medieval hymns, popularized in alternative healing circles.
+A set of frequencies derived from medieval hymns, widely used in sound healing practices.
 
 | Frequency | Name | Description |
 |-----------|------|-------------|
-| 174 Hz | Foundation | Reducing pain, grounding |
-| 285 Hz | Quantum Cognition | Healing tissues, safety |
+| 174 Hz | Foundation | Grounding, relaxation |
+| 285 Hz | Quantum Cognition | Wellness, safety |
 | 396 Hz | Ut | Liberating guilt and fear |
-| 417 Hz | Re | Undoing situations, facilitating change |
-| 528 Hz | Mi | DNA repair, transformation, miracles |
+| 417 Hz | Re | Facilitating change |
+| 528 Hz | Mi | Love, transformation, harmony |
 | 639 Hz | Fa | Connecting relationships |
 | 741 Hz | Sol | Awakening intuition, expression |
 | 852 Hz | La | Returning to spiritual order |
@@ -79,9 +79,9 @@ Notable frequencies from various research and traditions.
 
 | Frequency | Name | Description |
 |-----------|------|-------------|
-| 432 Hz | Concert A | Alternative natural tuning |
+| 432 Hz | Concert A | Natural tuning (Verdi pitch) |
 | 440 Hz | Standard A | Modern concert pitch |
-| 528 Hz | Love Frequency | Claimed DNA repair frequency |
+| 528 Hz | Love Frequency | Harmony and transformation |
 | 7.83 Hz | Schumann | Earth resonance fundamental |
 
 **Source**: 440 Hz standardized in 1955 by ISO. 432 Hz advocacy based on claimed mathematical relationships to nature. Schumann resonance discovered through electromagnetic research.
@@ -91,10 +91,10 @@ Notable frequencies from various research and traditions.
 ## Historical Context
 
 ### Solfeggio Origins
-The original solfeggio scale (Ut, Re, Mi, Fa, Sol, La) comes from Guido of Arezzo's 11th-century music theory, using syllables from the hymn "Ut queant laxis." The modern "extended solfeggio" frequencies (174, 285, 963 Hz, etc.) were added in the late 20th century by alternative researchers through numerological calculations.
+The original solfeggio scale (Ut, Re, Mi, Fa, Sol, La) comes from Guido of Arezzo's 11th-century music theory, using syllables from the hymn "Ut queant laxis." The modern "extended solfeggio" frequencies (174, 285, 963 Hz, etc.) were added in the late 20th century through numerological calculations.
 
 ### 432 Hz vs 440 Hz Debate
-Proponents claim 432 Hz is more "natural" and mathematically harmonious. Critics note that pitch standards have varied throughout history (baroque pitch was often around 415 Hz), and there's no scientific evidence for claimed health benefits. The debate continues in both music and alternative healing communities.
+Proponents claim 432 Hz is more "natural" and mathematically harmonious. Critics note that pitch standards have varied throughout history (baroque pitch was often around 415 Hz), and there's no scientific evidence for claimed health benefits. The debate continues in both music and sound healing communities.
 
 ### Singing Bowl Tradition
 Himalayan singing bowls have been used in Tibetan Buddhist practice for centuries. The bowls produce a fundamental frequency plus inharmonic overtones that create their characteristic sound. Modern "crystal singing bowls" are tuned to specific frequencies for chakra work.

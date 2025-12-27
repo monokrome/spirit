@@ -1,4 +1,4 @@
-//! Spirit - Generate alternative/fringe frequency audio files for experimentation.
+//! Spirit - Generate frequency-based audio files for meditation and exploration.
 
 mod cli;
 mod config;

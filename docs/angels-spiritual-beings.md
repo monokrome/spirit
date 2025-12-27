@@ -88,8 +88,8 @@ Beings believed to have achieved enlightenment and now guide humanity.
 
 | Frequency | Master | Teaching/Domain |
 |-----------|--------|-----------------|
-| 528 Hz | Jesus/Sananda | Love, healing, redemption |
-| 639 Hz | Mary Magdalene | Sacred feminine, devotion |
+| 528 Hz | Christ Consciousness | Universal love, healing, compassion |
+| 639 Hz | Divine Feminine | Sacred feminine, devotion |
 | 432 Hz | Buddha | Enlightenment, compassion, mindfulness |
 | 741 Hz | Saint Germain | Transmutation, violet flame, alchemy |
 | 852 Hz | Kuan Yin | Compassion, mercy, divine mother |

@@ -95,7 +95,7 @@ The 22 Major Arcana cards and their associated frequencies.
 
 ## Goetia Frequencies
 
-Selected spirits from the Ars Goetia (Lesser Key of Solomon), presented for study purposes.
+Selected entries from the Ars Goetia (Lesser Key of Solomon), a historical grimoire text. These are included for academic and historical context regarding Western esoteric traditions.
 
 | Frequency | Spirit | Rank | Traditional Domain |
 |-----------|--------|------|-------------------|
@@ -122,6 +122,8 @@ Selected spirits from the Ars Goetia (Lesser Key of Solomon), presented for stud
 
 The 72 three-letter names derived from Exodus 14:19-21.
 
+**Note on Sacred Names**: These names hold deep significance in Jewish mystical tradition (Kabbalah). They are included here for educational context about Western esoteric history. Those from Jewish backgrounds or with sincere interest in Kabbalah are encouraged to study with qualified teachers within that tradition.
+
 | Frequency | Number | Name | Attribution |
 |-----------|--------|------|-------------|
 | 528 Hz | 1 | VHV (Vehuiah) | Will, new beginnings |
@@ -136,7 +138,7 @@ The 72 three-letter names derived from Exodus 14:19-21.
 
 (Full 72 names available in generated audio files)
 
-**Source**: Kabbalistic tradition, systematized by medieval Jewish mystics. The 72-fold name derived through exegetical methods from Torah. Modern use influenced by Golden Dawn and later Western occultism.
+**Source**: Kabbalistic tradition, systematized by medieval Jewish mystics. The 72-fold name derived through exegetical methods from Torah. Modern use influenced by Golden Dawn and later Western occultism. Frequency associations are contemporary additions.
 
 ---
 

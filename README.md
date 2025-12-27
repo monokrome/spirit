@@ -1,12 +1,12 @@
 # Spirit
 
-A Rust command-line tool for generating alternative and fringe frequency audio files for experimentation and research.
+A Rust command-line tool for generating frequency-based audio files for meditation, experimentation, and personal exploration.
 
 ## Overview
 
-Spirit generates audio files based on various documented frequencies from alternative healing traditions, esoteric systems, and consciousness research. The tool is designed for personal experimentation and makes no claims about the efficacy of any frequencies.
+Spirit generates audio files based on frequencies documented across healing traditions, spiritual practices, esoteric systems, and consciousness research. The tool is designed for personal exploration and makes no claims about the efficacy of any frequencies.
 
-**This is an experimental research tool.** The frequencies and their associated claims come from various alternative traditions and should be approached with appropriate skepticism and curiosity.
+**This is an exploratory tool.** The frequencies and their associated meanings come from diverse traditions worldwide. Approach with both openness and discernment.
 
 ## Features
 
@@ -102,7 +102,7 @@ See the [docs](./docs/) directory for detailed documentation on each frequency c
 
 ## Disclaimer
 
-This tool generates audio files based on frequencies documented in various alternative and esoteric traditions. No medical, therapeutic, or supernatural claims are made. Use at your own discretion and never replace professional medical advice with frequency experimentation.
+This tool generates audio files based on frequencies documented across diverse spiritual, healing, and esoteric traditions. No medical, therapeutic, or supernatural claims are made. Use at your own discretion and consult qualified professionals for health concerns.
 
 ## License
 

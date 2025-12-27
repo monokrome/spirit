@@ -65,17 +65,17 @@ Comprehensive documentation for all frequency categories in the Spirit audio gen
 
 ## Disclaimer
 
-The frequencies documented here come from various alternative, esoteric, and spiritual traditions. While some (like brainwave frequencies and Schumann resonance) have scientific basis, many claims about specific frequencies lack peer-reviewed evidence.
+The frequencies documented here come from diverse spiritual, esoteric, and healing traditions worldwide. While some (like brainwave frequencies and Schumann resonance) have scientific basis, many claims about specific frequencies lack peer-reviewed evidence.
 
 This tool is for:
-- Personal experimentation
+- Personal exploration
 - Meditation enhancement
 - Spiritual practice
-- Curiosity and exploration
+- Curiosity and learning
 
 It is **not** for:
 - Medical treatment
 - Replacing professional healthcare
 - Making health claims
 
-Use with appropriate skepticism and enjoy the exploration.
+Approach with both openness and discernment.

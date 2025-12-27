@@ -2,7 +2,7 @@
 name = "spirit"
 version = "0.1.0"
 edition = "2021"
-description = "Generate alternative/fringe frequency audio files for experimentation"
+description = "Generate frequency-based audio files for meditation and exploration"
 
 [dependencies]
 hound = "3.5"

@@ -1,6 +1,6 @@
 # Healing Modalities
 
-Frequencies associated with alternative and complementary healing systems.
+Frequencies associated with various healing traditions and wellness practices.
 
 ## Commands
 
@@ -76,7 +76,7 @@ Frequencies claimed to resonate with specific body organs.
 | 315.8 Hz | Blood | Circulation, oxygenation |
 | 352.0 Hz | Bones | Skeletal integrity |
 
-**Source**: Various alternative medicine traditions including German "new medicine" and bioresonance therapy. These frequencies are not validated by mainstream anatomy or physiology. The concept of organs having specific resonant frequencies is not supported by scientific evidence.
+**Source**: Various healing traditions including German "new medicine" and bioresonance therapy. These frequencies are not validated by mainstream anatomy or physiology. The concept of organs having specific resonant frequencies is not supported by peer-reviewed evidence.
 
 ---
 
@@ -119,19 +119,19 @@ Frequencies based on Ayurvedic medicine concepts.
 
 ## DNA Activation Frequencies
 
-Frequencies claimed to affect DNA and cellular function.
+Frequencies associated with cellular wellness in some healing traditions.
 
-| Frequency | Claim | Notes |
-|-----------|-------|-------|
-| 528 Hz | DNA Repair | "Miracle frequency" claims |
-| 432 Hz | DNA Resonance | Natural tuning to DNA |
-| 285 Hz | Tissue Healing | Cellular regeneration |
-| 174 Hz | Pain Reduction | Anesthetic effect |
-| 741 Hz | Detoxification | Cellular cleansing |
-| 852 Hz | Intuition Activation | Third eye/pineal |
-| 963 Hz | Pineal Activation | "God frequency" |
+| Frequency | Association | Tradition |
+|-----------|-------------|-----------|
+| 528 Hz | Cellular harmony | Solfeggio tradition |
+| 432 Hz | Natural resonance | Verdi tuning advocates |
+| 285 Hz | Tissue wellness | Solfeggio tradition |
+| 174 Hz | Relaxation | Solfeggio tradition |
+| 741 Hz | Cleansing | Solfeggio tradition |
+| 852 Hz | Intuition | Solfeggio tradition |
+| 963 Hz | Spiritual connection | Solfeggio tradition |
 
-**Source**: Modern alternative health claims, popularized by Dr. Leonard Horowitz and others. The claim that 528 Hz repairs DNA originates from interpretations of water crystallography experiments (Masaru Emoto) and numerological analysis. Not supported by molecular biology research.
+**Source**: Modern healing traditions, popularized by various authors. These associations come from numerological and spiritual interpretations rather than molecular biology research. No peer-reviewed studies support effects on DNA.
 
 ---
 
