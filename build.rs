@@ -51,10 +51,10 @@ fn escape_rust_string(s: &str) -> String {
 }
 
 fn main() {
-    println!("cargo:rerun-if-changed=frequencies.toml");
+    println!("cargo:rerun-if-changed=etc/frequencies.toml");
 
     let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-    let toml_path = Path::new(&manifest_dir).join("frequencies.toml");
+    let toml_path = Path::new(&manifest_dir).join("etc/frequencies.toml");
     let out_dir = env::var("OUT_DIR").unwrap();
 
     let toml_content = fs::read_to_string(&toml_path).expect("Failed to read frequencies.toml");
