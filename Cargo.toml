@@ -7,3 +7,7 @@ description = "Generate alternative/fringe frequency audio files for experimenta
 [dependencies]
 hound = "3.5"
 clap = { version = "4", features = ["derive"] }
+
+[build-dependencies]
+toml = "0.8"
+serde = { version = "1", features = ["derive"] }

@@ -37,6 +37,7 @@ pub enum Commands {
     /// Generate all preset frequencies
     All,
 
+    // Category commands (must match frequencies.toml)
     /// Generate all 9 Solfeggio frequencies
     Solfeggio,
     /// Generate angel number frequencies (111, 222, 333, etc.)

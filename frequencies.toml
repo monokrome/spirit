@@ -1,0 +1,4895 @@
+# Spirit Frequency Database
+# Generated from Rust source - edit this file to add/modify frequencies
+
+[[categories]]
+id = "solfeggio"
+command = "Solfeggio"
+dir_name = "solfeggio"
+display_name = "Solfeggio Frequencies"
+file_prefix = "solfeggio"
+cli_description = "Generate all 9 Solfeggio frequencies"
+
+[[categories.frequencies]]
+hz = 174.0
+name = "174"
+description = "Pain relief, anesthetic"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "285"
+description = "Tissue healing, regeneration"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "396"
+description = "Liberation from guilt and fear"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "417"
+description = "Facilitating change, breaking patterns"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "528"
+description = "Love frequency, DNA repair, miracles"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "639"
+description = "Connecting relationships, harmony"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "741"
+description = "Expression, solutions, cleansing"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "852"
+description = "Spiritual order, awakening intuition"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "963"
+description = "Divine consciousness, pineal activation"
+
+[[categories]]
+id = "angels"
+command = "Angels"
+dir_name = "angels"
+display_name = "Angel Number Frequencies"
+file_prefix = "angel"
+cli_description = "Generate angel number frequencies (111, 222, 333, etc.)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "111"
+description = "New beginnings, manifestation"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "222"
+description = "Balance, harmony, cooperation"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "333"
+description = "Ascended masters, encouragement"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "444"
+description = "Protection, angelic presence"
+
+[[categories.frequencies]]
+hz = 555.0
+name = "555"
+description = "Major life changes coming"
+
+[[categories.frequencies]]
+hz = 666.0
+name = "666"
+description = "Balance material/spiritual (reclaimed)"
+
+[[categories.frequencies]]
+hz = 777.0
+name = "777"
+description = "Divine luck, miracles"
+
+[[categories.frequencies]]
+hz = 888.0
+name = "888"
+description = "Abundance, infinite flow"
+
+[[categories.frequencies]]
+hz = 999.0
+name = "999"
+description = "Completion, lightworker activation"
+
+[[categories]]
+id = "chakras"
+command = "Chakras"
+dir_name = "chakras"
+display_name = "Chakra Frequencies"
+file_prefix = "chakra"
+cli_description = "Generate chakra meditation sequence"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "root"
+description = "Root chakra (Muladhara) - grounding"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "sacral"
+description = "Sacral chakra (Svadhisthana) - creativity"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "solar_plexus"
+description = "Solar plexus (Manipura) - confidence"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "heart"
+description = "Heart chakra (Anahata) - love"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "throat"
+description = "Throat chakra (Vishuddha) - expression"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "third_eye"
+description = "Third eye (Ajna) - intuition"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "crown"
+description = "Crown chakra (Sahasrara) - enlightenment"
+
+[[categories]]
+id = "special"
+command = "Special"
+dir_name = "special"
+display_name = "Special Frequencies"
+file_prefix = "special"
+cli_description = "Generate special frequencies"
+
+[[categories.frequencies]]
+hz = 7.83
+name = "schumann"
+description = "Schumann resonance (Earth's EM frequency)"
+
+[[categories.frequencies]]
+hz = 40.0
+name = "gamma40"
+description = "Gamma entrainment (Alzheimer's research)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "om"
+description = "Om frequency (Earth year tone)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "432"
+description = "Verdi tuning, 'natural' frequency"
+
+[[categories.frequencies]]
+hz = 440.0
+name = "440"
+description = "Standard concert pitch"
+
+[[categories]]
+id = "planetary"
+command = "Planets"
+dir_name = "planetary"
+display_name = "Planetary Frequencies (Cosmic Octave)"
+file_prefix = "planet"
+cli_description = "Generate planetary frequencies (Cosmic Octave)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "sun"
+description = "Sun (center, vitality, self-expression)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "moon"
+description = "Moon (emotions, intuition, cycles)"
+
+[[categories.frequencies]]
+hz = 141.27
+name = "mercury"
+description = "Mercury (communication, intellect)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "venus"
+description = "Venus (love, beauty, harmony)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "mars"
+description = "Mars (energy, action, courage)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "jupiter"
+description = "Jupiter (expansion, wisdom, luck)"
+
+[[categories.frequencies]]
+hz = 147.85
+name = "saturn"
+description = "Saturn (discipline, karma, time)"
+
+[[categories.frequencies]]
+hz = 207.36
+name = "uranus"
+description = "Uranus (innovation, awakening)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "neptune"
+description = "Neptune (dreams, mysticism, psychic)"
+
+[[categories.frequencies]]
+hz = 140.25
+name = "pluto"
+description = "Pluto (transformation, rebirth)"
+
+[[categories.frequencies]]
+hz = 136.10
+name = "earth_year"
+description = "Earth year (Om, grounding)"
+
+[[categories.frequencies]]
+hz = 194.18
+name = "earth_day"
+description = "Earth day (physical vitality)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "platonic_year"
+description = "Platonic year (spiritual evolution)"
+
+[[categories]]
+id = "rife"
+command = "Rife"
+dir_name = "rife"
+display_name = "Rife Frequencies"
+file_prefix = "rife"
+cli_description = "Generate Rife machine frequencies"
+
+[[categories.frequencies]]
+hz = 20.0
+name = "rife_20"
+description = "Rife universal healing"
+
+[[categories.frequencies]]
+hz = 727.0
+name = "rife_727"
+description = "Rife general vitality"
+
+[[categories.frequencies]]
+hz = 787.0
+name = "rife_787"
+description = "Rife bacterial infections"
+
+[[categories.frequencies]]
+hz = 800.0
+name = "rife_800"
+description = "Rife cellular regeneration"
+
+[[categories.frequencies]]
+hz = 880.0
+name = "rife_880"
+description = "Rife bacterial/viral"
+
+[[categories.frequencies]]
+hz = 1552.0
+name = "rife_1552"
+description = "Rife parasites"
+
+[[categories.frequencies]]
+hz = 1862.0
+name = "rife_1862"
+description = "Rife detoxification"
+
+[[categories.frequencies]]
+hz = 2008.0
+name = "rife_2008"
+description = "Rife muscle relaxation"
+
+[[categories.frequencies]]
+hz = 2127.0
+name = "rife_2127"
+description = "Rife immune boost"
+
+[[categories.frequencies]]
+hz = 2720.0
+name = "rife_2720"
+description = "Rife pain relief"
+
+[[categories.frequencies]]
+hz = 10000.0
+name = "rife_10k"
+description = "Rife tissue repair"
+
+[[categories]]
+id = "sacred_math"
+command = "Sacred"
+dir_name = "sacred_math"
+display_name = "Sacred Mathematics Frequencies"
+file_prefix = "sacred"
+cli_description = "Generate Tesla 3-6-9 and sacred math frequencies"
+
+[[categories.frequencies]]
+hz = 3.0
+name = "tesla_3"
+description = "Tesla 3 (creation, trinity)"
+
+[[categories.frequencies]]
+hz = 6.0
+name = "tesla_6"
+description = "Tesla 6 (balance, harmony)"
+
+[[categories.frequencies]]
+hz = 9.0
+name = "tesla_9"
+description = "Tesla 9 (completion, enlightenment)"
+
+[[categories.frequencies]]
+hz = 33.0
+name = "master_33"
+description = "Master number 33 (master teacher)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "tesla_111"
+description = "111 (3x37, gateway)"
+
+[[categories.frequencies]]
+hz = 369.0
+name = "tesla_369"
+description = "Tesla 369 (key to universe)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "sacred_432"
+description = "Cosmic tuning (108x4)"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "fibonacci_144"
+description = "Fibonacci 144 (golden sequence)"
+
+[[categories.frequencies]]
+hz = 233.0
+name = "fibonacci_233"
+description = "Fibonacci 233"
+
+[[categories.frequencies]]
+hz = 377.0
+name = "fibonacci_377"
+description = "Fibonacci 377"
+
+[[categories.frequencies]]
+hz = 610.0
+name = "fibonacci_610"
+description = "Fibonacci 610"
+
+[[categories.frequencies]]
+hz = 1.618
+name = "phi"
+description = "Phi/Golden ratio (as isochronic pulse)"
+
+[[categories.frequencies]]
+hz = 3.141592653589793
+name = "pi"
+description = "Pi (as isochronic pulse)"
+
+[[categories]]
+id = "consciousness"
+command = "Consciousness"
+dir_name = "consciousness"
+display_name = "Consciousness Exploration Frequencies"
+file_prefix = "consciousness"
+cli_description = "Generate consciousness exploration frequencies"
+
+[[categories.frequencies]]
+hz = 4.0
+name = "astral_projection"
+description = "Astral projection (theta gateway)"
+
+[[categories.frequencies]]
+hz = 6.3
+name = "lucid_dream"
+description = "Lucid dreaming induction"
+
+[[categories.frequencies]]
+hz = 7.0
+name = "psychic"
+description = "Psychic awareness, ESP"
+
+[[categories.frequencies]]
+hz = 7.5
+name = "remote_viewing"
+description = "Remote viewing frequency"
+
+[[categories.frequencies]]
+hz = 8.0
+name = "obe"
+description = "Out-of-body experience"
+
+[[categories.frequencies]]
+hz = 10.5
+name = "mind_body"
+description = "Mind-body connection"
+
+[[categories.frequencies]]
+hz = 12.0
+name = "centering"
+description = "Centering, grounding"
+
+[[categories.frequencies]]
+hz = 13.0
+name = "gateway"
+description = "Gateway to higher dimensions"
+
+[[categories.frequencies]]
+hz = 27.0
+name = "kundalini"
+description = "Kundalini activation"
+
+[[categories.frequencies]]
+hz = 33.0
+name = "christ"
+description = "Christ consciousness"
+
+[[categories.frequencies]]
+hz = 55.0
+name = "tantric"
+description = "Tantric kundalini"
+
+[[categories.frequencies]]
+hz = 63.0
+name = "third_eye_open"
+description = "Third eye opening"
+
+[[categories.frequencies]]
+hz = 83.0
+name = "telepathy"
+description = "Telepathy, psychic communication"
+
+[[categories.frequencies]]
+hz = 108.0
+name = "sacred_108"
+description = "Sacred 108 (total consciousness)"
+
+[[categories]]
+id = "singing_bowls"
+command = "Bowls"
+dir_name = "singing_bowls"
+display_name = "Tibetan Singing Bowl Tones"
+file_prefix = "bowl"
+cli_description = "Generate Tibetan singing bowl tones"
+
+[[categories.frequencies]]
+hz = 110.0
+name = "bowl_root"
+description = "Root bowl (grounding tone)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "bowl_om"
+description = "Om bowl (universal sound)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "bowl_platonic"
+description = "Platonic year bowl"
+
+[[categories.frequencies]]
+hz = 194.18
+name = "bowl_earth"
+description = "Earth day bowl"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "bowl_moon"
+description = "Moon bowl (synodic month)"
+
+[[categories.frequencies]]
+hz = 256.0
+name = "bowl_c"
+description = "C note bowl (scientific pitch)"
+
+[[categories.frequencies]]
+hz = 288.0
+name = "bowl_d"
+description = "D note bowl"
+
+[[categories.frequencies]]
+hz = 320.0
+name = "bowl_e"
+description = "E note bowl"
+
+[[categories.frequencies]]
+hz = 341.3
+name = "bowl_f"
+description = "F note bowl"
+
+[[categories.frequencies]]
+hz = 384.0
+name = "bowl_g"
+description = "G note bowl"
+
+[[categories.frequencies]]
+hz = 426.7
+name = "bowl_a"
+description = "A note bowl"
+
+[[categories.frequencies]]
+hz = 480.0
+name = "bowl_b"
+description = "B note bowl"
+
+[[categories]]
+id = "zodiac"
+command = "Zodiac"
+dir_name = "zodiac"
+display_name = "Zodiac Frequencies"
+file_prefix = "zodiac"
+cli_description = "Generate zodiac sign frequencies"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "aries"
+description = "Aries (Mars - action, initiative)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "taurus"
+description = "Taurus (Venus - stability, sensuality)"
+
+[[categories.frequencies]]
+hz = 141.27
+name = "gemini"
+description = "Gemini (Mercury - communication)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "cancer"
+description = "Cancer (Moon - emotions, nurturing)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "leo"
+description = "Leo (Sun - creativity, leadership)"
+
+[[categories.frequencies]]
+hz = 141.27
+name = "virgo"
+description = "Virgo (Mercury - analysis, service)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "libra"
+description = "Libra (Venus - balance, relationships)"
+
+[[categories.frequencies]]
+hz = 140.25
+name = "scorpio"
+description = "Scorpio (Pluto - transformation)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "sagittarius"
+description = "Sagittarius (Jupiter - expansion)"
+
+[[categories.frequencies]]
+hz = 147.85
+name = "capricorn"
+description = "Capricorn (Saturn - discipline)"
+
+[[categories.frequencies]]
+hz = 207.36
+name = "aquarius"
+description = "Aquarius (Uranus - innovation)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "pisces"
+description = "Pisces (Neptune - mysticism)"
+
+[[categories]]
+id = "monroe_focus"
+command = "Monroe"
+dir_name = "monroe_focus"
+display_name = "Monroe Institute Focus Levels"
+file_prefix = "focus"
+cli_description = "Generate Monroe Institute focus levels"
+
+[[categories.frequencies]]
+hz = 10.0
+name = "focus_10"
+description = "Focus 10: Mind awake, body asleep"
+
+[[categories.frequencies]]
+hz = 12.0
+name = "focus_12"
+description = "Focus 12: Expanded awareness"
+
+[[categories.frequencies]]
+hz = 15.0
+name = "focus_15"
+description = "Focus 15: No time (timelessness)"
+
+[[categories.frequencies]]
+hz = 21.0
+name = "focus_21"
+description = "Focus 21: Bridge to other dimensions"
+
+[[categories.frequencies]]
+hz = 23.0
+name = "focus_23"
+description = "Focus 23: Afterlife territory"
+
+[[categories.frequencies]]
+hz = 27.0
+name = "focus_27"
+description = "Focus 27: The Park (reception center)"
+
+[[categories]]
+id = "elements"
+command = "Elements"
+dir_name = "elements"
+display_name = "Elemental Frequencies"
+file_prefix = "element"
+cli_description = "Generate elemental frequencies"
+
+[[categories.frequencies]]
+hz = 68.05
+name = "earth"
+description = "Earth element (stability, grounding)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "water"
+description = "Water element (flow, emotions)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "fire"
+description = "Fire element (transformation, will)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "air"
+description = "Air element (intellect, communication)"
+
+[[categories.frequencies]]
+hz = 272.2
+name = "ether"
+description = "Ether/Spirit (transcendence)"
+
+[[categories]]
+id = "archangels"
+command = "Archangels"
+dir_name = "archangels"
+display_name = "Archangel Frequencies"
+file_prefix = "archangel"
+cli_description = "Generate archangel frequencies"
+
+[[categories.frequencies]]
+hz = 195.0
+name = "michael"
+description = "Michael (protection, courage, strength)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "gabriel"
+description = "Gabriel (communication, messages, birth)"
+
+[[categories.frequencies]]
+hz = 288.0
+name = "raphael"
+description = "Raphael (healing, travel, guidance)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "uriel"
+description = "Uriel (wisdom, illumination, insight)"
+
+[[categories.frequencies]]
+hz = 409.0
+name = "chamuel"
+description = "Chamuel (love, relationships, peace)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "jophiel"
+description = "Jophiel (beauty, creativity, joy)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "zadkiel"
+description = "Zadkiel (mercy, forgiveness, transmutation)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "haniel"
+description = "Haniel (moon energy, intuition, grace)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "raziel"
+description = "Raziel (mysteries, secrets, magic)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "sandalphon"
+description = "Sandalphon (music, prayer, grounding)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "metatron"
+description = "Metatron (sacred geometry, ascension)"
+
+[[categories]]
+id = "crystals"
+command = "Crystals"
+dir_name = "crystals"
+display_name = "Crystal Healing Frequencies"
+file_prefix = "crystal"
+cli_description = "Generate crystal healing frequencies"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "clear_quartz"
+description = "Clear Quartz (amplification, clarity)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "rose_quartz"
+description = "Rose Quartz (love, heart healing)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "carnelian"
+description = "Carnelian (vitality, creativity, courage)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "moonstone"
+description = "Moonstone (intuition, feminine energy)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "citrine"
+description = "Citrine (abundance, manifestation, joy)"
+
+[[categories.frequencies]]
+hz = 174.0
+name = "smoky_quartz"
+description = "Smoky Quartz (grounding, protection)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "black_tourmaline"
+description = "Black Tourmaline (EMF protection, cleansing)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "obsidian"
+description = "Obsidian (shadow work, truth, grounding)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "tigers_eye"
+description = "Tiger's Eye (willpower, confidence)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "emerald"
+description = "Emerald (heart chakra, abundance, love)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "amazonite"
+description = "Amazonite (communication, truth, harmony)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "lapis_lazuli"
+description = "Lapis Lazuli (third eye, wisdom, royalty)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "amethyst"
+description = "Amethyst (spiritual protection, intuition)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "selenite"
+description = "Selenite (crown chakra, angelic connection)"
+
+[[categories]]
+id = "sacred_geometry"
+command = "Geometry"
+dir_name = "sacred_geometry"
+display_name = "Sacred Geometry Frequencies"
+file_prefix = "geometry"
+cli_description = "Generate sacred geometry / Merkaba frequencies"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "merkaba"
+description = "Merkaba activation (light body vehicle)"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "flower_of_life"
+description = "Flower of Life (creation pattern)"
+
+[[categories.frequencies]]
+hz = 216.0
+name = "sri_yantra"
+description = "Sri Yantra (manifestation, abundance)"
+
+[[categories.frequencies]]
+hz = 288.0
+name = "metatrons_cube"
+description = "Metatron's Cube (platonic solids)"
+
+[[categories.frequencies]]
+hz = 360.0
+name = "torus"
+description = "Torus field (energy flow, zero point)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "vesica_piscis"
+description = "Vesica Piscis (creation, duality, birth)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "golden_spiral"
+description = "Golden Spiral/Phi (nature's pattern)"
+
+[[categories.frequencies]]
+hz = 594.0
+name = "seed_of_life"
+description = "Seed of Life (7 days of creation)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "tree_of_life"
+description = "Tree of Life (Kabbalah, 10 sephiroth)"
+
+[[categories.frequencies]]
+hz = 720.0
+name = "icosahedron"
+description = "Icosahedron (water element, flow)"
+
+[[categories.frequencies]]
+hz = 864.0
+name = "dodecahedron"
+description = "Dodecahedron (ether, universe)"
+
+[[categories]]
+id = "shamanic"
+command = "Shamanic"
+dir_name = "shamanic"
+display_name = "Shamanic Journey Frequencies"
+file_prefix = "shamanic"
+cli_description = "Generate shamanic journey frequencies"
+
+[[categories.frequencies]]
+hz = 4.0
+name = "lower_world"
+description = "Lower World journey (power animals)"
+
+[[categories.frequencies]]
+hz = 4.5
+name = "shamanic_trance"
+description = "Shamanic trance state"
+
+[[categories.frequencies]]
+hz = 6.0
+name = "middle_world"
+description = "Middle World (nature spirits)"
+
+[[categories.frequencies]]
+hz = 7.0
+name = "upper_world"
+description = "Upper World journey (spirit guides)"
+
+[[categories.frequencies]]
+hz = 7.83
+name = "earth_connection"
+description = "Earth connection (Schumann)"
+
+[[categories.frequencies]]
+hz = 8.0
+name = "soul_retrieval"
+description = "Soul retrieval frequency"
+
+[[categories.frequencies]]
+hz = 10.0
+name = "power_animal"
+description = "Power animal connection"
+
+[[categories.frequencies]]
+hz = 13.0
+name = "ancestor_spirits"
+description = "Ancestor spirit communication"
+
+[[categories.frequencies]]
+hz = 40.0
+name = "shamanic_ecstasy"
+description = "Shamanic ecstasy (gamma)"
+
+[[categories.frequencies]]
+hz = 108.0
+name = "medicine_wheel"
+description = "Medicine wheel completion"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "drum_ceremony"
+description = "Sacred drum frequency"
+
+[[categories]]
+id = "dna_activation"
+command = "Dna"
+dir_name = "dna"
+display_name = "DNA Activation Frequencies"
+file_prefix = "dna"
+cli_description = "Generate DNA activation frequencies"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "dna_repair"
+description = "DNA repair (miracle tone)"
+
+[[categories.frequencies]]
+hz = 537.0
+name = "telomere"
+description = "Telomere activation (longevity)"
+
+[[categories.frequencies]]
+hz = 582.0
+name = "12_strand"
+description = "12-strand DNA activation"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "cellular_memory"
+description = "Cellular memory clearing"
+
+[[categories.frequencies]]
+hz = 685.0
+name = "rna_activation"
+description = "RNA activation frequency"
+
+[[categories.frequencies]]
+hz = 748.0
+name = "junk_dna"
+description = "Junk DNA awakening"
+
+[[categories.frequencies]]
+hz = 825.0
+name = "light_body"
+description = "Light body integration"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "pineal_dna"
+description = "Pineal gland DNA activation"
+
+[[categories.frequencies]]
+hz = 1122.0
+name = "crystalline"
+description = "Crystalline DNA structure"
+
+[[categories.frequencies]]
+hz = 1155.0
+name = "starseed"
+description = "Starseed DNA activation"
+
+[[categories]]
+id = "colors"
+command = "Colors"
+dir_name = "colors"
+display_name = "Color/Light Frequencies"
+file_prefix = "color"
+cli_description = "Generate color/light frequencies"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "red"
+description = "Red (root, vitality, passion)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "orange"
+description = "Orange (sacral, creativity, emotion)"
+
+[[categories.frequencies]]
+hz = 141.27
+name = "yellow"
+description = "Yellow (solar plexus, confidence)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "green"
+description = "Green (heart, healing, nature)"
+
+[[categories.frequencies]]
+hz = 194.18
+name = "blue"
+description = "Blue (throat, communication, calm)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "indigo"
+description = "Indigo (third eye, intuition)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "violet"
+description = "Violet (crown, spirituality)"
+
+[[categories.frequencies]]
+hz = 272.2
+name = "white"
+description = "White light (all colors, purity)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "gold"
+description = "Gold (Christ light, wisdom)"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "silver"
+description = "Silver (moon, feminine, reflection)"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "platinum"
+description = "Platinum (higher dimensions)"
+
+[[categories]]
+id = "egyptian"
+command = "Egyptian"
+dir_name = "egyptian"
+display_name = "Egyptian/Pyramid Frequencies"
+file_prefix = "egyptian"
+cli_description = "Generate Egyptian / pyramid frequencies"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "giza"
+description = "Great Pyramid of Giza resonance"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "kings_chamber"
+description = "King's Chamber frequency"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "queens_chamber"
+description = "Queen's Chamber frequency"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "thoth"
+description = "Thoth (wisdom, writing, magic)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "isis"
+description = "Isis (magic, motherhood, healing)"
+
+[[categories.frequencies]]
+hz = 288.0
+name = "osiris"
+description = "Osiris (death, rebirth, afterlife)"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "horus"
+description = "Horus (sky, kingship, protection)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "anubis"
+description = "Anubis (death, embalming, guides)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "ra"
+description = "Ra (sun god, creation, power)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "hathor"
+description = "Hathor (love, music, fertility)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "maat"
+description = "Ma'at (truth, justice, balance)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "sekhmet"
+description = "Sekhmet (war, healing, power)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "bastet"
+description = "Bastet (cats, protection, pleasure)"
+
+[[categories]]
+id = "moon_phases"
+command = "Moon"
+dir_name = "moon_phases"
+display_name = "Moon Phase Frequencies"
+file_prefix = "moon"
+cli_description = "Generate moon phase frequencies"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "full_moon"
+description = "Full Moon (completion, power, release)"
+
+[[categories.frequencies]]
+hz = 194.18
+name = "new_moon"
+description = "New Moon (new beginnings, intention)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "waxing_crescent"
+description = "Waxing Crescent (growth, hope)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "first_quarter"
+description = "First Quarter (action, decision)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "waxing_gibbous"
+description = "Waxing Gibbous (refinement, patience)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "waning_gibbous"
+description = "Waning Gibbous (gratitude, sharing)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "third_quarter"
+description = "Third Quarter (release, forgiveness)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "waning_crescent"
+description = "Waning Crescent (rest, surrender)"
+
+[[categories.frequencies]]
+hz = 234.16
+name = "blue_moon"
+description = "Blue Moon (rare power, magic)"
+
+[[categories.frequencies]]
+hz = 247.0
+name = "blood_moon"
+description = "Blood Moon (eclipse, transformation)"
+
+[[categories.frequencies]]
+hz = 259.0
+name = "supermoon"
+description = "Supermoon (amplified energy)"
+
+[[categories]]
+id = "ascended_masters"
+command = "Masters"
+dir_name = "ascended_masters"
+display_name = "Ascended Master Frequencies"
+file_prefix = "master"
+cli_description = "Generate ascended master frequencies"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "jesus"
+description = "Jesus/Yeshua (love, healing, Christ consciousness)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "mary_magdalene"
+description = "Mary Magdalene (divine feminine, anointing)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "mother_mary"
+description = "Mother Mary (compassion, motherhood)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "st_germain"
+description = "St. Germain (violet flame, alchemy)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "quan_yin"
+description = "Quan Yin (mercy, compassion, bodhisattva)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "buddha"
+description = "Buddha (enlightenment, middle path)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "krishna"
+description = "Krishna (divine love, playfulness)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "shiva"
+description = "Shiva (destruction, transformation)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "ganesh"
+description = "Ganesh (obstacle removal, new beginnings)"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "el_morya"
+description = "El Morya (will, protection, faith)"
+
+[[categories.frequencies]]
+hz = 555.0
+name = "hilarion"
+description = "Hilarion (healing, truth, science)"
+
+[[categories.frequencies]]
+hz = 777.0
+name = "serapis_bey"
+description = "Serapis Bey (ascension, discipline)"
+
+[[categories]]
+id = "starseeds"
+command = "Starseeds"
+dir_name = "starseeds"
+display_name = "Starseed/ET Frequencies"
+file_prefix = "starseed"
+cli_description = "Generate starseed / ET frequencies"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "pleiadean"
+description = "Pleiadian (love, healing, creativity)"
+
+[[categories.frequencies]]
+hz = 288.0
+name = "sirian"
+description = "Sirian (technology, dolphin energy)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "arcturian"
+description = "Arcturian (healing, ascension, 5D)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "lyran"
+description = "Lyran (ancient wisdom, feline energy)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "andromedan"
+description = "Andromedan (freedom, telepathy)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "orion"
+description = "Orion (balance, polarity integration)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "venusian"
+description = "Venusian (love, art, beauty)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "galactic_center"
+description = "Galactic Center (source connection)"
+
+[[categories.frequencies]]
+hz = 1111.0
+name = "ashtar_command"
+description = "Ashtar Command (light fleet)"
+
+[[categories.frequencies]]
+hz = 1212.0
+name = "council_of_light"
+description = "Council of Light (guidance)"
+
+[[categories]]
+id = "tarot"
+command = "Tarot"
+dir_name = "tarot"
+display_name = "Tarot Major Arcana Frequencies"
+file_prefix = "tarot"
+cli_description = "Generate tarot major arcana frequencies"
+
+[[categories.frequencies]]
+hz = 0.0
+name = "fool"
+description = "0 - The Fool (beginnings, innocence)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "magician"
+description = "I - The Magician (manifestation, will)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "high_priestess"
+description = "II - High Priestess (intuition, mystery)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "empress"
+description = "III - The Empress (abundance, fertility)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "emperor"
+description = "IV - The Emperor (authority, structure)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "hierophant"
+description = "V - The Hierophant (tradition, teaching)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "lovers"
+description = "VI - The Lovers (choice, union)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "chariot"
+description = "VII - The Chariot (victory, control)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "strength"
+description = "VIII - Strength (courage, patience)"
+
+[[categories.frequencies]]
+hz = 7.83
+name = "hermit"
+description = "IX - The Hermit (introspection, guidance)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "wheel"
+description = "X - Wheel of Fortune (cycles, fate)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "justice"
+description = "XI - Justice (balance, karma)"
+
+[[categories.frequencies]]
+hz = 4.0
+name = "hanged_man"
+description = "XII - Hanged Man (surrender, perspective)"
+
+[[categories.frequencies]]
+hz = 140.25
+name = "death"
+description = "XIII - Death (transformation, ending)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "temperance"
+description = "XIV - Temperance (balance, patience)"
+
+[[categories.frequencies]]
+hz = 147.85
+name = "devil"
+description = "XV - The Devil (shadow, bondage)"
+
+[[categories.frequencies]]
+hz = 207.36
+name = "tower"
+description = "XVI - The Tower (upheaval, revelation)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "star"
+description = "XVII - The Star (hope, inspiration)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "moon_card"
+description = "XVIII - The Moon (illusion, subconscious)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "sun"
+description = "XIX - The Sun (joy, success, vitality)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "judgement"
+description = "XX - Judgement (rebirth, calling)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "world"
+description = "XXI - The World (completion, integration)"
+
+[[categories]]
+id = "enochian"
+command = "Enochian"
+dir_name = "enochian"
+display_name = "Enochian/Ceremonial Magic Frequencies"
+file_prefix = "enochian"
+cli_description = "Generate Enochian / ceremonial magic frequencies"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "watchtower_east"
+description = "Watchtower of the East (Air)"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "watchtower_south"
+description = "Watchtower of the South (Fire)"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "watchtower_west"
+description = "Watchtower of the West (Water)"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "watchtower_north"
+description = "Watchtower of the North (Earth)"
+
+[[categories.frequencies]]
+hz = 555.0
+name = "tablet_union"
+description = "Tablet of Union (Spirit)"
+
+[[categories.frequencies]]
+hz = 666.0
+name = "aethyr"
+description = "30 Aethyrs (spiritual planes)"
+
+[[categories.frequencies]]
+hz = 777.0
+name = "lbrp"
+description = "Lesser Banishing Ritual of Pentagram"
+
+[[categories.frequencies]]
+hz = 888.0
+name = "middle_pillar"
+description = "Middle Pillar (Kabbalistic)"
+
+[[categories.frequencies]]
+hz = 999.0
+name = "great_work"
+description = "Great Work completion"
+
+[[categories]]
+id = "reiki"
+command = "Reiki"
+dir_name = "reiki"
+display_name = "Reiki Symbol Frequencies"
+file_prefix = "reiki"
+cli_description = "Generate Reiki symbol frequencies"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "cho_ku_rei"
+description = "Cho Ku Rei (power symbol, increase)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "sei_hei_ki"
+description = "Sei Hei Ki (mental/emotional healing)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "hon_sha_ze_sho_nen"
+description = "Hon Sha Ze Sho Nen (distance healing)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "dai_ko_myo"
+description = "Dai Ko Myo (master symbol, enlightenment)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "raku"
+description = "Raku (grounding, completion)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "karuna_zonar"
+description = "Karuna Zonar (past life, cellular)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "karuna_halu"
+description = "Karuna Halu (break negative patterns)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "karuna_rama"
+description = "Karuna Rama (grounding, manifestation)"
+
+[[categories]]
+id = "intentions"
+command = "Intentions"
+dir_name = "intentions"
+display_name = "Intention/Affirmation Frequencies"
+file_prefix = "intention"
+cli_description = "Generate intention / affirmation frequencies"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "manifestation"
+description = "Manifestation activation"
+
+[[categories.frequencies]]
+hz = 174.0
+name = "safety"
+description = "Safety and security"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "healing"
+description = "Physical healing"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "liberation"
+description = "Liberation from fear"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "change"
+description = "Facilitating change"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "love"
+description = "Love and miracles"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "connection"
+description = "Relationships and connection"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "expression"
+description = "Self-expression and solutions"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "intuition"
+description = "Intuition and insight"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "oneness"
+description = "Divine connection and oneness"
+
+[[categories.frequencies]]
+hz = 1111.0
+name = "awakening"
+description = "Spiritual awakening"
+
+[[categories.frequencies]]
+hz = 1212.0
+name = "ascension"
+description = "Ascension activation"
+
+[[categories]]
+id = "norse"
+command = "Norse"
+dir_name = "norse"
+display_name = "Norse/Viking Frequencies"
+file_prefix = "norse"
+cli_description = "Generate Norse / Viking frequencies"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "odin"
+description = "Odin (wisdom, war, death, poetry)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "thor"
+description = "Thor (thunder, strength, protection)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "freya"
+description = "Freya (love, beauty, fertility, war)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "loki"
+description = "Loki (trickster, change, chaos)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "baldur"
+description = "Baldur (light, purity, beauty)"
+
+[[categories.frequencies]]
+hz = 147.85
+name = "hel"
+description = "Hel (death, underworld)"
+
+[[categories.frequencies]]
+hz = 194.18
+name = "heimdall"
+description = "Heimdall (guardian, vigilance)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "frigg"
+description = "Frigg (motherhood, wisdom, foresight)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "tyr"
+description = "Tyr (justice, law, war)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "yggdrasil"
+description = "Yggdrasil (world tree, connection)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "fehu"
+description = "Fehu rune (wealth, abundance)"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "uruz"
+description = "Uruz rune (strength, vitality)"
+
+[[categories.frequencies]]
+hz = 174.0
+name = "thurisaz"
+description = "Thurisaz rune (protection, Thor)"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "ansuz"
+description = "Ansuz rune (Odin, communication)"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "raidho"
+description = "Raidho rune (journey, movement)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "kenaz"
+description = "Kenaz rune (knowledge, creativity)"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "gebo"
+description = "Gebo rune (gift, partnership)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "wunjo"
+description = "Wunjo rune (joy, harmony)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "algiz"
+description = "Algiz rune (protection, divine)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "sowilo"
+description = "Sowilo rune (sun, success, victory)"
+
+[[categories]]
+id = "greek"
+command = "Greek"
+dir_name = "greek"
+display_name = "Greek/Olympian Frequencies"
+file_prefix = "greek"
+cli_description = "Generate Greek / Olympian frequencies"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "zeus"
+description = "Zeus (sky, thunder, king of gods)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "hera"
+description = "Hera (marriage, women, family)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "ares"
+description = "Ares (war, courage, violence)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "aphrodite"
+description = "Aphrodite (love, beauty, desire)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "apollo"
+description = "Apollo (sun, music, prophecy)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "artemis"
+description = "Artemis (moon, hunt, wilderness)"
+
+[[categories.frequencies]]
+hz = 141.27
+name = "hermes"
+description = "Hermes (messenger, commerce, thieves)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "athena"
+description = "Athena (wisdom, strategy, crafts)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "poseidon"
+description = "Poseidon (sea, earthquakes, horses)"
+
+[[categories.frequencies]]
+hz = 140.25
+name = "hades"
+description = "Hades (underworld, death, riches)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "demeter"
+description = "Demeter (harvest, fertility, seasons)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "hephaestus"
+description = "Hephaestus (forge, fire, craftsmen)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "dionysus"
+description = "Dionysus (wine, ecstasy, theater)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "hecate"
+description = "Hecate (magic, crossroads, ghosts)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "asclepius"
+description = "Asclepius (medicine, healing)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "persephone"
+description = "Persephone (spring, underworld queen)"
+
+[[categories]]
+id = "hindu"
+command = "Hindu"
+dir_name = "hindu"
+display_name = "Hindu Frequencies"
+file_prefix = "hindu"
+cli_description = "Generate Hindu mantra and deity frequencies"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "om"
+description = "Om (primordial sound, universe)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "shiva"
+description = "Om Namah Shivaya (transformation)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "lakshmi"
+description = "Om Shreem (abundance, Lakshmi)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "saraswati"
+description = "Om Aim (wisdom, Saraswati)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "ganesha"
+description = "Om Gam (obstacle removal, Ganesha)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "durga"
+description = "Om Dum (protection, Durga)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "kali"
+description = "Om Krim (destruction of ego, Kali)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "vishnu"
+description = "Om Namo Narayanaya (preservation)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "brahma"
+description = "Om Brahma (creation)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "gayatri"
+description = "Gayatri Mantra (enlightenment)"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "hanuman"
+description = "Om Ham (devotion, strength)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "rama"
+description = "Om Ram (righteousness)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "krishna"
+description = "Hare Krishna (divine love)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "aum"
+description = "Aum (creation-preservation-destruction)"
+
+[[categories.frequencies]]
+hz = 256.0
+name = "so_ham"
+description = "So Ham (I am That)"
+
+[[categories.frequencies]]
+hz = 288.0
+name = "sat_nam"
+description = "Sat Nam (true identity)"
+
+[[categories]]
+id = "buddhist"
+command = "Buddhist"
+dir_name = "buddhist"
+display_name = "Buddhist Frequencies"
+file_prefix = "buddhist"
+cli_description = "Generate Buddhist frequencies"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "om_mani"
+description = "Om Mani Padme Hum (compassion)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "heart_sutra"
+description = "Heart Sutra (emptiness, wisdom)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "dharma_wheel"
+description = "Dharma Wheel (Buddha's teaching)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "loving_kindness"
+description = "Metta (loving-kindness)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "middle_way"
+description = "Middle Way (balance)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "nirvana"
+description = "Nirvana (liberation)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "bodhi"
+description = "Bodhi (awakening, enlightenment)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "sangha"
+description = "Sangha (community)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "medicine_buddha"
+description = "Medicine Buddha (healing)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "green_tara"
+description = "Green Tara (compassion, protection)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "white_tara"
+description = "White Tara (longevity, healing)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "amitabha"
+description = "Amitabha (Pure Land, rebirth)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "avalokiteshvara"
+description = "Avalokiteshvara (compassion)"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "vajrasattva"
+description = "Vajrasattva (purification)"
+
+[[categories]]
+id = "celtic"
+command = "Celtic"
+dir_name = "celtic"
+display_name = "Celtic/Druid Frequencies"
+file_prefix = "celtic"
+cli_description = "Generate Celtic / Druid frequencies"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "dagda"
+description = "Dagda (father god, abundance)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "brigid"
+description = "Brigid (fire, poetry, healing)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "morrigan"
+description = "Morrigan (war, fate, death)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "cernunnos"
+description = "Cernunnos (wild, nature, fertility)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "danu"
+description = "Danu (mother goddess, rivers)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "lugh"
+description = "Lugh (sun, skills, harvest)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "awen"
+description = "Awen (divine inspiration)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "oak"
+description = "Oak (strength, wisdom, druids)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "samhain"
+description = "Samhain (veil thinning, ancestors)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "beltane"
+description = "Beltane (fire, fertility, passion)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "imbolc"
+description = "Imbolc (spring, Brigid, purification)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "lughnasadh"
+description = "Lughnasadh (harvest, Lugh)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "ogham_beith"
+description = "Beith/Birch (new beginnings)"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "ogham_luis"
+description = "Luis/Rowan (protection)"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "ogham_duir"
+description = "Duir/Oak (strength, doorways)"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "ogham_tinne"
+description = "Tinne/Holly (balance, challenge)"
+
+[[categories]]
+id = "kabbalah"
+command = "Kabbalah"
+dir_name = "kabbalah"
+display_name = "Kabbalah Frequencies"
+file_prefix = "kabbalah"
+cli_description = "Generate Kabbalah frequencies"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "kether"
+description = "Kether (Crown, divine will)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "chokmah"
+description = "Chokmah (Wisdom, divine masculine)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "binah"
+description = "Binah (Understanding, divine feminine)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "chesed"
+description = "Chesed (Mercy, loving-kindness)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "geburah"
+description = "Geburah (Severity, strength, judgment)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "tiphareth"
+description = "Tiphareth (Beauty, harmony, Christ)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "netzach"
+description = "Netzach (Victory, emotion, Venus)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "hod"
+description = "Hod (Splendor, intellect, Mercury)"
+
+[[categories.frequencies]]
+hz = 174.0
+name = "yesod"
+description = "Yesod (Foundation, Moon, astral)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "malkuth"
+description = "Malkuth (Kingdom, Earth, physical)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "daath"
+description = "Daath (Knowledge, hidden sephira)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "ain_soph"
+description = "Ain Soph (limitless light)"
+
+[[categories]]
+id = "orisha"
+command = "Orisha"
+dir_name = "orisha"
+display_name = "Orisha Frequencies"
+file_prefix = "orisha"
+cli_description = "Generate Yoruba / Santeria Orisha frequencies"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "olodumare"
+description = "Olodumare (supreme creator)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "obatala"
+description = "Obatala (peace, purity, wisdom)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "shango"
+description = "Shango (thunder, fire, justice)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "yemoja"
+description = "Yemoja (ocean, motherhood)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "oshun"
+description = "Oshun (rivers, love, fertility)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "elegua"
+description = "Elegua (crossroads, messenger)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "ogun"
+description = "Ogun (iron, war, labor)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "oya"
+description = "Oya (wind, storms, transformation)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "babalu_aye"
+description = "Babalu Aye (disease, healing)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "yewa"
+description = "Yewa (death, solitude, cemeteries)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "nana_buruku"
+description = "Nana Buruku (swamps, ancestors)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "ori"
+description = "Ori (higher self, destiny)"
+
+[[categories]]
+id = "vodou"
+command = "Vodou"
+dir_name = "vodou"
+display_name = "Vodou Lwa Frequencies"
+file_prefix = "vodou"
+cli_description = "Generate Vodou / Lwa frequencies"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "bondye"
+description = "Bondye (supreme god)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "papa_legba"
+description = "Papa Legba (crossroads, communication)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "erzulie"
+description = "Erzulie Freda (love, beauty, luxury)"
+
+[[categories.frequencies]]
+hz = 140.25
+name = "baron_samedi"
+description = "Baron Samedi (death, sexuality, healing)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "maman_brigitte"
+description = "Maman Brigitte (death, cemeteries)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "ogou"
+description = "Ogou (war, fire, iron)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "la_sirene"
+description = "La Sirene (ocean, music, dreams)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "damballa"
+description = "Damballa (serpent, creation, wisdom)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "ayida_weddo"
+description = "Ayida Weddo (rainbow, fertility)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "ghede"
+description = "Ghede (death, ancestors, humor)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "simbi"
+description = "Simbi (magic, rain, fresh water)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "loko"
+description = "Loko (plants, healing, sanctuary)"
+
+[[categories]]
+id = "angelic_hierarchy"
+command = "AngelicHierarchy"
+dir_name = "angelic_hierarchy"
+display_name = "Angelic Hierarchy Frequencies"
+file_prefix = "hierarchy"
+cli_description = "Generate angelic hierarchy frequencies"
+
+[[categories.frequencies]]
+hz = 999.0
+name = "seraphim"
+description = "Seraphim (highest, divine love, fire)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "cherubim"
+description = "Cherubim (wisdom, guardians)"
+
+[[categories.frequencies]]
+hz = 888.0
+name = "thrones"
+description = "Thrones (divine justice, humility)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "dominions"
+description = "Dominions (leadership, divine will)"
+
+[[categories.frequencies]]
+hz = 777.0
+name = "virtues"
+description = "Virtues (miracles, courage, grace)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "powers"
+description = "Powers (warrior angels, protection)"
+
+[[categories.frequencies]]
+hz = 666.0
+name = "principalities"
+description = "Principalities (nations, rulers)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "archangels_choir"
+description = "Archangels (messengers, guidance)"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "angels_choir"
+description = "Angels (guardians, personal guides)"
+
+[[categories.frequencies]]
+hz = 1111.0
+name = "elohim"
+description = "Elohim (creator beings)"
+
+[[categories.frequencies]]
+hz = 1212.0
+name = "source"
+description = "Source/God frequency"
+
+[[categories]]
+id = "goetia"
+command = "Goetia"
+dir_name = "goetia"
+display_name = "Goetic Frequencies"
+file_prefix = "goetia"
+cli_description = "Generate Goetia / Solomonic frequencies"
+
+[[categories.frequencies]]
+hz = 66.6
+name = "king_bael"
+description = "Bael (1st, invisibility, wisdom)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "duke_agares"
+description = "Agares (2nd, languages, runaways)"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "prince_vassago"
+description = "Vassago (3rd, past/future, finding)"
+
+[[categories.frequencies]]
+hz = 183.0
+name = "marquis_samigina"
+description = "Samigina (4th, deceased souls)"
+
+[[categories.frequencies]]
+hz = 216.0
+name = "president_marbas"
+description = "Marbas (5th, healing, mechanics)"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "duke_valefor"
+description = "Valefor (6th, thieves, familiars)"
+
+[[categories.frequencies]]
+hz = 270.0
+name = "marquis_amon"
+description = "Amon (7th, past/future, reconciliation)"
+
+[[categories.frequencies]]
+hz = 288.0
+name = "duke_barbatos"
+description = "Barbatos (8th, animals, treasures)"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "king_paimon"
+description = "Paimon (9th, arts, sciences, secrets)"
+
+[[categories.frequencies]]
+hz = 369.0
+name = "president_buer"
+description = "Buer (10th, philosophy, healing)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "duke_gusion"
+description = "Gusion (11th, honor, dignity)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "prince_sitri"
+description = "Sitri (12th, love, desire)"
+
+[[categories.frequencies]]
+hz = 456.0
+name = "king_beleth"
+description = "Beleth (13th, love, obedience)"
+
+[[categories.frequencies]]
+hz = 480.0
+name = "marquis_leraje"
+description = "Leraje (14th, battles, wounds)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "duke_eligos"
+description = "Eligos (15th, wars, secrets)"
+
+[[categories.frequencies]]
+hz = 555.0
+name = "duke_zepar"
+description = "Zepar (16th, love, fertility)"
+
+[[categories.frequencies]]
+hz = 72.0
+name = "all_72"
+description = "All 72 Goetia (complete invocation)"
+
+[[categories]]
+id = "psychic"
+command = "Psychic"
+dir_name = "psychic"
+display_name = "Psychic Ability Frequencies"
+file_prefix = "psychic"
+cli_description = "Generate psychic ability frequencies"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "clairvoyance"
+description = "Clairvoyance (clear seeing)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "clairaudience"
+description = "Clairaudience (clear hearing)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "clairsentience"
+description = "Clairsentience (clear feeling)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "claircognizance"
+description = "Claircognizance (clear knowing)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "clairalience"
+description = "Clairalience (clear smelling)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "clairgustance"
+description = "Clairgustance (clear tasting)"
+
+[[categories.frequencies]]
+hz = 7.83
+name = "telepathy_base"
+description = "Telepathy (mind-to-mind)"
+
+[[categories.frequencies]]
+hz = 10.0
+name = "remote_view"
+description = "Remote viewing (distant seeing)"
+
+[[categories.frequencies]]
+hz = 6.3
+name = "precognition"
+description = "Precognition (future sight)"
+
+[[categories.frequencies]]
+hz = 4.0
+name = "retrocognition"
+description = "Retrocognition (past sight)"
+
+[[categories.frequencies]]
+hz = 8.0
+name = "psychometry"
+description = "Psychometry (object reading)"
+
+[[categories.frequencies]]
+hz = 12.0
+name = "mediumship"
+description = "Mediumship (spirit communication)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "channeling"
+description = "Channeling (higher beings)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "aura_reading"
+description = "Aura reading (energy fields)"
+
+[[categories]]
+id = "akashic"
+command = "Akashic"
+dir_name = "akashic"
+display_name = "Akashic Records Frequencies"
+file_prefix = "akashic"
+cli_description = "Generate Akashic Records frequencies"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "akashic_access"
+description = "Akashic Records access"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "soul_records"
+description = "Soul records viewing"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "past_life"
+description = "Past life recall"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "between_lives"
+description = "Between lives state"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "soul_contract"
+description = "Soul contract review"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "karmic_clearing"
+description = "Karmic clearing"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "ancestral_healing"
+description = "Ancestral line healing"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "dna_memory"
+description = "DNA memory activation"
+
+[[categories.frequencies]]
+hz = 4.5
+name = "regression"
+description = "Past life regression"
+
+[[categories.frequencies]]
+hz = 7.0
+name = "life_review"
+description = "Life review state"
+
+[[categories.frequencies]]
+hz = 1111.0
+name = "records_keeper"
+description = "Akashic Records keeper"
+
+[[categories]]
+id = "protection"
+command = "Protection"
+dir_name = "protection"
+display_name = "Protection Frequencies"
+file_prefix = "protection"
+cli_description = "Generate protection frequencies"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "shield"
+description = "Energetic shielding"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "banishing"
+description = "Banishing negativity"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "cord_cutting"
+description = "Cord cutting (unhealthy attachments)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "purification"
+description = "Energetic purification"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "boundary"
+description = "Boundary strengthening"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "hex_breaking"
+description = "Hex/curse breaking"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "evil_eye"
+description = "Evil eye removal"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "divine_protection"
+description = "Divine protection invocation"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "mirror_shield"
+description = "Mirror shield (return to sender)"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "salt_circle"
+description = "Salt circle frequency"
+
+[[categories.frequencies]]
+hz = 777.0
+name = "lbrp_freq"
+description = "LBRP ritual frequency"
+
+[[categories.frequencies]]
+hz = 888.0
+name = "archangel_shield"
+description = "Archangelic protection"
+
+[[categories]]
+id = "animal_totems"
+command = "Totems"
+dir_name = "animal_totems"
+display_name = "Animal Totem Frequencies"
+file_prefix = "totem"
+cli_description = "Generate animal totem frequencies"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "wolf"
+description = "Wolf (loyalty, intuition, teacher)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "eagle"
+description = "Eagle (vision, freedom, spirit)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "bear"
+description = "Bear (strength, introspection)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "deer"
+description = "Deer (gentleness, grace)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "dolphin"
+description = "Dolphin (joy, harmony, communication)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "owl"
+description = "Owl (wisdom, night vision, magic)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "hummingbird"
+description = "Hummingbird (joy, lightness, love)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "snake"
+description = "Snake (transformation, rebirth)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "raven"
+description = "Raven (magic, messages, mystery)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "turtle"
+description = "Turtle (patience, mother earth)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "butterfly"
+description = "Butterfly (transformation, beauty)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "dragon"
+description = "Dragon (power, wisdom, primal)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "phoenix"
+description = "Phoenix (rebirth, immortality)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "unicorn"
+description = "Unicorn (purity, magic, healing)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "lion"
+description = "Lion (courage, leadership, sun)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "whale"
+description = "Whale (ancient wisdom, records)"
+
+[[categories]]
+id = "fae"
+command = "Fae"
+dir_name = "fae"
+display_name = "Fae/Elemental Being Frequencies"
+file_prefix = "fae"
+cli_description = "Generate fairy / fae frequencies"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "fairy_queen"
+description = "Fairy Queen (nature magic)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "gnome"
+description = "Gnome (earth elemental, treasure)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "sylph"
+description = "Sylph (air elemental, wind)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "salamander"
+description = "Salamander (fire elemental)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "undine"
+description = "Undine (water elemental)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "pixie"
+description = "Pixie (mischief, nature)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "dryad"
+description = "Dryad (tree spirit)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "brownie"
+description = "Brownie (household helper)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "leprechaun"
+description = "Leprechaun (luck, treasure)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "green_man"
+description = "Green Man (forest, rebirth)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "sidhe"
+description = "Sidhe (noble fae, otherworld)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "nature_spirits"
+description = "Nature spirits (general)"
+
+[[categories]]
+id = "abundance"
+command = "Abundance"
+dir_name = "abundance"
+display_name = "Abundance/Wealth Frequencies"
+file_prefix = "abundance"
+cli_description = "Generate abundance / wealth frequencies"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "prosperity"
+description = "Prosperity consciousness"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "money_flow"
+description = "Money flow activation"
+
+[[categories.frequencies]]
+hz = 888.0
+name = "abundance_portal"
+description = "888 abundance portal"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "wealth_vibration"
+description = "Wealth vibration"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "opportunity"
+description = "Opportunity magnetism"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "lucky_breaks"
+description = "Lucky breaks frequency"
+
+[[categories.frequencies]]
+hz = 777.0
+name = "jackpot"
+description = "Jackpot/windfall energy"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "stable_income"
+description = "Stable income frequency"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "gold_frequency"
+description = "Gold/sun wealth"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "jupiter_luck"
+description = "Jupiter expansion/luck"
+
+[[categories.frequencies]]
+hz = 1111.0
+name = "instant_manifestation"
+description = "Instant manifestation"
+
+[[categories]]
+id = "love"
+command = "Love"
+dir_name = "love"
+display_name = "Love/Relationship Frequencies"
+file_prefix = "love"
+cli_description = "Generate love and relationship frequencies"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "unconditional_love"
+description = "Unconditional love"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "soulmate"
+description = "Soulmate attraction"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "venus_love"
+description = "Venus love frequency"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "heart_healing"
+description = "Heart chakra healing"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "twin_flame"
+description = "Twin flame connection"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "self_love"
+description = "Self-love activation"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "forgiveness"
+description = "Forgiveness frequency"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "communication_love"
+description = "Loving communication"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "divine_union"
+description = "Divine union/marriage"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "new_love"
+description = "New love attraction"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "partnership"
+description = "Partnership harmony"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "commitment"
+description = "Commitment frequency"
+
+[[categories]]
+id = "dimensions"
+command = "Dimensions"
+dir_name = "dimensions"
+display_name = "Dimensional Frequencies"
+file_prefix = "dimension"
+cli_description = "Generate dimensional frequencies"
+
+[[categories.frequencies]]
+hz = 3.0
+name = "3d"
+description = "3D physical reality anchor"
+
+[[categories.frequencies]]
+hz = 4.0
+name = "4d"
+description = "4D astral/time dimension"
+
+[[categories.frequencies]]
+hz = 5.0
+name = "5d"
+description = "5D unity consciousness"
+
+[[categories.frequencies]]
+hz = 6.0
+name = "6d"
+description = "6D geometric/archetypal"
+
+[[categories.frequencies]]
+hz = 7.0
+name = "7d"
+description = "7D sound/vibration realm"
+
+[[categories.frequencies]]
+hz = 8.0
+name = "8d"
+description = "8D light realm"
+
+[[categories.frequencies]]
+hz = 9.0
+name = "9d"
+description = "9D collective consciousness"
+
+[[categories.frequencies]]
+hz = 10.0
+name = "10d"
+description = "10D cosmic consciousness"
+
+[[categories.frequencies]]
+hz = 11.0
+name = "11d"
+description = "11D universal gateway"
+
+[[categories.frequencies]]
+hz = 12.0
+name = "12d"
+description = "12D source connection"
+
+[[categories.frequencies]]
+hz = 13.0
+name = "13d"
+description = "13D void/creation point"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "reality_shift"
+description = "Reality shifting base"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "timeline_jump"
+description = "Timeline jumping"
+
+[[categories.frequencies]]
+hz = 1111.0
+name = "portal"
+description = "Dimensional portal"
+
+[[categories]]
+id = "aura"
+command = "Aura"
+dir_name = "aura"
+display_name = "Aura Layer Frequencies"
+file_prefix = "aura"
+cli_description = "Generate aura layer frequencies"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "etheric"
+description = "Etheric body (physical double)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "emotional"
+description = "Emotional body (feelings)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "mental"
+description = "Mental body (thoughts)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "astral"
+description = "Astral body (bridge)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "etheric_template"
+description = "Etheric template (blueprint)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "celestial"
+description = "Celestial body (spiritual emotions)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "causal"
+description = "Causal/Ketheric body (soul)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "aura_cleanse"
+description = "Full aura cleansing"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "aura_seal"
+description = "Aura sealing/protection"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "aura_expand"
+description = "Aura expansion"
+
+[[categories]]
+id = "chinese"
+command = "Chinese"
+dir_name = "chinese"
+display_name = "Chinese/Taoist Frequencies"
+file_prefix = "chinese"
+cli_description = "Generate Chinese / Taoist frequencies"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "wood"
+description = "Wood element (growth, spring, liver)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "fire"
+description = "Fire element (expansion, summer, heart)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "earth"
+description = "Earth element (stability, transitions, spleen)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "metal"
+description = "Metal element (contraction, autumn, lungs)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "water"
+description = "Water element (stillness, winter, kidneys)"
+
+[[categories.frequencies]]
+hz = 68.05
+name = "yin"
+description = "Yin (receptive, feminine, moon)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "yang"
+description = "Yang (active, masculine, sun)"
+
+[[categories.frequencies]]
+hz = 108.0
+name = "balance"
+description = "Yin-Yang balance (harmony)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "jade_emperor"
+description = "Jade Emperor (supreme deity)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "guan_yin"
+description = "Guan Yin (compassion, mercy)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "xi_wangmu"
+description = "Xi Wangmu (Queen Mother of West)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "nezha"
+description = "Nezha (protection, youth)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "caishen"
+description = "Caishen (wealth, prosperity)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "zhong_kui"
+description = "Zhong Kui (demon queller)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "qian"
+description = "Qian/Heaven (creative, strong)"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "kun"
+description = "Kun/Earth (receptive, devoted)"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "zhen"
+description = "Zhen/Thunder (arousing, movement)"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "kan"
+description = "Kan/Water (abysmal, danger)"
+
+[[categories.frequencies]]
+hz = 555.0
+name = "gen"
+description = "Gen/Mountain (stillness, stopping)"
+
+[[categories.frequencies]]
+hz = 666.0
+name = "xun"
+description = "Xun/Wind (gentle, penetrating)"
+
+[[categories.frequencies]]
+hz = 777.0
+name = "li"
+description = "Li/Fire (clinging, clarity)"
+
+[[categories.frequencies]]
+hz = 888.0
+name = "dui"
+description = "Dui/Lake (joyous, open)"
+
+[[categories]]
+id = "shinto"
+command = "Shinto"
+dir_name = "shinto"
+display_name = "Shinto Frequencies"
+file_prefix = "shinto"
+cli_description = "Generate Japanese / Shinto frequencies"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "amaterasu"
+description = "Amaterasu (sun goddess, imperial ancestor)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "tsukuyomi"
+description = "Tsukuyomi (moon god, night)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "susanoo"
+description = "Susanoo (storm god, sea)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "inari"
+description = "Inari (rice, fertility, foxes, prosperity)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "benzaiten"
+description = "Benzaiten (music, art, wisdom, water)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "ebisu"
+description = "Ebisu (fishermen, luck, prosperity)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "bishamonten"
+description = "Bishamonten (warriors, protection)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "daikokuten"
+description = "Daikokuten (wealth, commerce, farmers)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "raijin"
+description = "Raijin (thunder, lightning)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "fujin"
+description = "Fujin (wind)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "ryujin"
+description = "Ryujin (dragon king, sea)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "kannon"
+description = "Kannon (mercy, compassion)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "jizo"
+description = "Jizo (children, travelers, afterlife)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "tengu"
+description = "Tengu (mountain spirits, martial arts)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "kami"
+description = "Kami (general divine spirits)"
+
+[[categories.frequencies]]
+hz = 256.0
+name = "kotodama"
+description = "Kotodama (word spirit, power of sound)"
+
+[[categories]]
+id = "sumerian"
+command = "Sumerian"
+dir_name = "sumerian"
+display_name = "Sumerian/Mesopotamian Frequencies"
+file_prefix = "sumerian"
+cli_description = "Generate Sumerian / Mesopotamian frequencies"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "anu"
+description = "Anu (sky father, king of gods)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "enlil"
+description = "Enlil (wind, storms, earth)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "enki"
+description = "Enki/Ea (water, wisdom, creation)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "inanna"
+description = "Inanna/Ishtar (love, war, fertility)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "utu"
+description = "Utu/Shamash (sun, justice, truth)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "nanna"
+description = "Nanna/Sin (moon, wisdom)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "nergal"
+description = "Nergal (war, plague, underworld)"
+
+[[categories.frequencies]]
+hz = 140.25
+name = "ereshkigal"
+description = "Ereshkigal (underworld queen)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "marduk"
+description = "Marduk (Babylon patron, creation)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "nabu"
+description = "Nabu (writing, wisdom, scribes)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "ninurta"
+description = "Ninurta (war, agriculture, healing)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "gula"
+description = "Gula (healing, medicine)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "dumuzid"
+description = "Dumuzid/Tammuz (shepherds, rebirth)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "ningishzida"
+description = "Ningishzida (serpents, underworld)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "anunnaki"
+description = "Anunnaki (divine assembly)"
+
+[[categories]]
+id = "mesoamerican"
+command = "Mesoamerican"
+dir_name = "mesoamerican"
+display_name = "Mesoamerican Frequencies"
+file_prefix = "mesoamerican"
+cli_description = "Generate Mayan / Aztec frequencies"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "hunab_ku"
+description = "Hunab Ku (supreme creator, galactic center)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "kinich_ahau"
+description = "Kinich Ahau (sun god)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "ixchel"
+description = "Ixchel (moon, medicine, weaving)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "chaac"
+description = "Chaac (rain, lightning, agriculture)"
+
+[[categories.frequencies]]
+hz = 140.25
+name = "ah_puch"
+description = "Ah Puch (death, underworld)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "itzamna"
+description = "Itzamna (creation, writing, healing)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "kukulkan"
+description = "Kukulkan (feathered serpent, wind)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "quetzalcoatl"
+description = "Quetzalcoatl (feathered serpent, wisdom)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "tezcatlipoca"
+description = "Tezcatlipoca (night, sorcery, jaguars)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "huitzilopochtli"
+description = "Huitzilopochtli (sun, war)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "tlaloc"
+description = "Tlaloc (rain, fertility, water)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "xochiquetzal"
+description = "Xochiquetzal (love, beauty, flowers)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "mictlantecuhtli"
+description = "Mictlantecuhtli (underworld lord)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "coatlicue"
+description = "Coatlicue (earth mother, life/death)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "ometeotl"
+description = "Ometeotl (dual creator, duality)"
+
+[[categories.frequencies]]
+hz = 13.0
+name = "tzolkin"
+description = "Tzolkin (260-day sacred calendar)"
+
+[[categories.frequencies]]
+hz = 20.0
+name = "uinal"
+description = "Uinal (20-day month cycle)"
+
+[[categories.frequencies]]
+hz = 52.0
+name = "calendar_round"
+description = "Calendar Round (52-year cycle)"
+
+[[categories]]
+id = "hermetic"
+command = "Hermetic"
+dir_name = "hermetic"
+display_name = "Hermetic Principle Frequencies"
+file_prefix = "hermetic"
+cli_description = "Generate Seven Hermetic Principles frequencies"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "mentalism"
+description = "Mentalism (The All is Mind, universe is mental)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "correspondence"
+description = "Correspondence (As above, so below)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "vibration"
+description = "Vibration (Nothing rests, everything moves)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "polarity"
+description = "Polarity (Everything is dual, opposites identical)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "rhythm"
+description = "Rhythm (Everything flows, pendulum swing)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "cause_effect"
+description = "Cause and Effect (Every cause has effect)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "gender"
+description = "Gender (Everything has masculine/feminine)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "kybalion"
+description = "Kybalion (hermetic wisdom integration)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "thoth"
+description = "Thoth/Hermes (hermetic master)"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "emerald_tablet"
+description = "Emerald Tablet (alchemical wisdom)"
+
+[[categories]]
+id = "alchemy"
+command = "Alchemy"
+dir_name = "alchemy"
+display_name = "Alchemy Frequencies"
+file_prefix = "alchemy"
+cli_description = "Generate Alchemy frequencies"
+
+[[categories.frequencies]]
+hz = 174.0
+name = "nigredo"
+description = "Nigredo (blackening, decomposition, shadow)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "albedo"
+description = "Albedo (whitening, purification, washing)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "citrinitas"
+description = "Citrinitas (yellowing, solar dawn, awakening)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "rubedo"
+description = "Rubedo (reddening, philosopher's stone, gold)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "calcination"
+description = "Calcination (fire, ego destruction)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "dissolution"
+description = "Dissolution (water, letting go)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "separation"
+description = "Separation (air, discernment)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "conjunction"
+description = "Conjunction (earth, recombination)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "fermentation"
+description = "Fermentation (spirit entering matter)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "distillation"
+description = "Distillation (purification, essence)"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "coagulation"
+description = "Coagulation (solidification, completion)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "philosophers_stone"
+description = "Philosopher's Stone (transmutation)"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "prima_materia"
+description = "Prima Materia (first matter, chaos)"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "quintessence"
+description = "Quintessence (fifth element, ether)"
+
+[[categories]]
+id = "numerology"
+command = "Numerology"
+dir_name = "numerology"
+display_name = "Numerology Frequencies"
+file_prefix = "numerology"
+cli_description = "Generate Numerology frequencies"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "one"
+description = "1 - New beginnings, independence, leadership"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "two"
+description = "2 - Partnership, balance, diplomacy"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "three"
+description = "3 - Creativity, expression, joy"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "four"
+description = "4 - Foundation, stability, hard work"
+
+[[categories.frequencies]]
+hz = 555.0
+name = "five"
+description = "5 - Change, freedom, adventure"
+
+[[categories.frequencies]]
+hz = 666.0
+name = "six"
+description = "6 - Harmony, responsibility, nurturing"
+
+[[categories.frequencies]]
+hz = 777.0
+name = "seven"
+description = "7 - Spirituality, wisdom, introspection"
+
+[[categories.frequencies]]
+hz = 888.0
+name = "eight"
+description = "8 - Abundance, power, karma"
+
+[[categories.frequencies]]
+hz = 999.0
+name = "nine"
+description = "9 - Completion, humanitarianism, wisdom"
+
+[[categories.frequencies]]
+hz = 1111.0
+name = "eleven"
+description = "11 - Master intuition, spiritual messenger"
+
+[[categories.frequencies]]
+hz = 2222.0
+name = "twentytwo"
+description = "22 - Master builder, large-scale vision"
+
+[[categories.frequencies]]
+hz = 3333.0
+name = "thirtythree"
+description = "33 - Master teacher, spiritual upliftment"
+
+[[categories.frequencies]]
+hz = 1234.0
+name = "sequence"
+description = "1234 - Steps, progress, moving forward"
+
+[[categories.frequencies]]
+hz = 1212.0
+name = "twelve_twelve"
+description = "1212 - Spiritual growth, stay positive"
+
+[[categories.frequencies]]
+hz = 1010.0
+name = "ten_ten"
+description = "1010 - Divine support, stay focused"
+
+[[categories]]
+id = "organs"
+command = "Organs"
+dir_name = "organs"
+display_name = "Organ Frequencies"
+file_prefix = "organ"
+cli_description = "Generate Body / Organ frequencies"
+
+[[categories.frequencies]]
+hz = 110.0
+name = "stomach"
+description = "Stomach (digestion, nourishment)"
+
+[[categories.frequencies]]
+hz = 117.3
+name = "liver"
+description = "Liver (detox, metabolism, anger)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "heart_organ"
+description = "Heart (love, circulation, joy)"
+
+[[categories.frequencies]]
+hz = 141.27
+name = "lungs"
+description = "Lungs (breath, grief, letting go)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "kidneys"
+description = "Kidneys (fear, vitality, life force)"
+
+[[categories.frequencies]]
+hz = 176.0
+name = "colon"
+description = "Colon (release, letting go)"
+
+[[categories.frequencies]]
+hz = 194.18
+name = "spleen"
+description = "Spleen (worry, overthinking, immunity)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "gallbladder"
+description = "Gallbladder (decision, courage)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "bladder"
+description = "Bladder (fear, holding on)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "pancreas"
+description = "Pancreas (sweetness, self-worth)"
+
+[[categories.frequencies]]
+hz = 264.0
+name = "brain"
+description = "Brain (cognition, consciousness)"
+
+[[categories.frequencies]]
+hz = 281.0
+name = "small_intestine"
+description = "Small intestine (assimilation)"
+
+[[categories.frequencies]]
+hz = 317.83
+name = "blood"
+description = "Blood (life force, vitality)"
+
+[[categories.frequencies]]
+hz = 319.88
+name = "bones"
+description = "Bones (structure, foundation)"
+
+[[categories.frequencies]]
+hz = 324.0
+name = "muscles"
+description = "Muscles (movement, action)"
+
+[[categories.frequencies]]
+hz = 352.0
+name = "thyroid"
+description = "Thyroid (metabolism, expression)"
+
+[[categories.frequencies]]
+hz = 480.0
+name = "pineal"
+description = "Pineal gland (third eye, melatonin)"
+
+[[categories.frequencies]]
+hz = 492.0
+name = "pituitary"
+description = "Pituitary (master gland, hormones)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "dna_organ"
+description = "DNA (genetic blueprint, repair)"
+
+[[categories]]
+id = "meridians"
+command = "Meridians"
+dir_name = "meridians"
+display_name = "Meridian Frequencies"
+file_prefix = "meridian"
+cli_description = "Generate Meridian / TCM frequencies"
+
+[[categories.frequencies]]
+hz = 110.0
+name = "lung_meridian"
+description = "Lung meridian (3-5am, grief, letting go)"
+
+[[categories.frequencies]]
+hz = 117.3
+name = "large_intestine"
+description = "Large intestine (5-7am, release)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "stomach_meridian"
+description = "Stomach meridian (7-9am, nourishment)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "spleen_meridian"
+description = "Spleen meridian (9-11am, transformation)"
+
+[[categories.frequencies]]
+hz = 141.27
+name = "heart_meridian"
+description = "Heart meridian (11am-1pm, joy)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "small_intestine_m"
+description = "Small intestine (1-3pm, sorting)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "bladder_meridian"
+description = "Bladder meridian (3-5pm, purification)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "kidney_meridian"
+description = "Kidney meridian (5-7pm, vitality)"
+
+[[categories.frequencies]]
+hz = 194.18
+name = "pericardium"
+description = "Pericardium (7-9pm, protection)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "triple_warmer"
+description = "Triple warmer (9-11pm, balance)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "gallbladder_m"
+description = "Gallbladder meridian (11pm-1am, decision)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "liver_meridian"
+description = "Liver meridian (1-3am, planning)"
+
+[[categories.frequencies]]
+hz = 256.0
+name = "du_mai"
+description = "Du Mai/Governing vessel (yang, spine)"
+
+[[categories.frequencies]]
+hz = 288.0
+name = "ren_mai"
+description = "Ren Mai/Conception vessel (yin, front)"
+
+[[categories.frequencies]]
+hz = 324.0
+name = "chong_mai"
+description = "Chong Mai/Penetrating vessel (blood)"
+
+[[categories.frequencies]]
+hz = 360.0
+name = "dai_mai"
+description = "Dai Mai/Belt vessel (binding)"
+
+[[categories]]
+id = "ayurveda"
+command = "Ayurveda"
+dir_name = "ayurveda"
+display_name = "Ayurveda Dosha Frequencies"
+file_prefix = "ayurveda"
+cli_description = "Generate Ayurveda frequencies"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "vata"
+description = "Vata dosha (air+ether, movement, creativity)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "pitta"
+description = "Pitta dosha (fire+water, transformation)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "kapha"
+description = "Kapha dosha (earth+water, stability)"
+
+[[categories.frequencies]]
+hz = 256.0
+name = "tridosha"
+description = "Tridosha balance (all three in harmony)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "rasa"
+description = "Rasa (plasma, lymph, nourishment)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "rakta"
+description = "Rakta (blood, oxygenation)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "mamsa"
+description = "Mamsa (muscle, strength)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "meda"
+description = "Meda (fat, lubrication, love)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "asthi"
+description = "Asthi (bone, support)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "majja"
+description = "Majja (marrow, nerve, depth)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "shukra"
+description = "Shukra (reproductive, creativity, ojas)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "ojas"
+description = "Ojas (vital essence, immunity, bliss)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "tejas"
+description = "Tejas (inner radiance, intelligence)"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "prana_ayur"
+description = "Prana (life force, breath)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "agni"
+description = "Agni (digestive fire, transformation)"
+
+[[categories.frequencies]]
+hz = 108.0
+name = "ama_clearing"
+description = "Ama clearing (toxin removal)"
+
+[[categories]]
+id = "sacred_sites"
+command = "SacredSites"
+dir_name = "sacred_sites"
+display_name = "Sacred Site Frequencies"
+file_prefix = "site"
+cli_description = "Generate Sacred Sites frequencies"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "giza_pyramid"
+description = "Great Pyramid of Giza (Egypt)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "stonehenge"
+description = "Stonehenge (England, solstice)"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "machu_picchu"
+description = "Machu Picchu (Peru, Incan)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "sedona"
+description = "Sedona vortexes (Arizona, USA)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "mount_shasta"
+description = "Mount Shasta (California, Lemurian)"
+
+[[categories.frequencies]]
+hz = 194.18
+name = "uluru"
+description = "Uluru/Ayers Rock (Australia, Aboriginal)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "glastonbury"
+description = "Glastonbury Tor (England, Avalon)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "chartres"
+description = "Chartres Cathedral labyrinth (France)"
+
+[[categories.frequencies]]
+hz = 256.0
+name = "angkor_wat"
+description = "Angkor Wat (Cambodia, Hindu/Buddhist)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "jerusalem"
+description = "Jerusalem (Israel, three faiths)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "varanasi"
+description = "Varanasi/Benares (India, Ganges)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "teotihuacan"
+description = "Teotihuacan (Mexico, pyramids)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "tibet_temples"
+description = "Tibetan temples (Himalayas)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "lourdes"
+description = "Lourdes (France, healing waters)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "delphi"
+description = "Delphi oracle (Greece, prophecy)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "easter_island"
+description = "Easter Island/Rapa Nui (Moai)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "borobudur"
+description = "Borobudur (Indonesia, Buddhist)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "mt_kailash"
+description = "Mount Kailash (Tibet, axis mundi)"
+
+[[categories]]
+id = "emotional_release"
+command = "Emotional"
+dir_name = "emotional"
+display_name = "Emotional Release Frequencies"
+file_prefix = "emotional"
+cli_description = "Generate Emotional Release frequencies"
+
+[[categories.frequencies]]
+hz = 174.0
+name = "fear_release"
+description = "Fear release (safety, security)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "grief_release"
+description = "Grief release (acceptance, peace)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "guilt_release"
+description = "Guilt release (self-forgiveness)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "shame_release"
+description = "Shame release (self-acceptance)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "anger_release"
+description = "Anger release (compassion, love)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "jealousy_release"
+description = "Jealousy release (abundance mindset)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "anxiety_release"
+description = "Anxiety release (calm, grounding)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "depression_lift"
+description = "Depression lift (hope, light)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "trauma_release"
+description = "Trauma release (integration, healing)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "joy_activation"
+description = "Joy activation (happiness, bliss)"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "peace_activation"
+description = "Peace activation (serenity, calm)"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "gratitude_activation"
+description = "Gratitude activation (appreciation)"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "confidence_boost"
+description = "Confidence boost (self-esteem)"
+
+[[categories.frequencies]]
+hz = 555.0
+name = "courage_activation"
+description = "Courage activation (bravery)"
+
+[[categories.frequencies]]
+hz = 777.0
+name = "hope_activation"
+description = "Hope activation (optimism)"
+
+[[categories.frequencies]]
+hz = 888.0
+name = "empowerment"
+description = "Empowerment (personal power)"
+
+[[categories]]
+id = "sleep"
+command = "Sleep"
+dir_name = "sleep"
+display_name = "Sleep Frequencies"
+file_prefix = "sleep"
+cli_description = "Generate Sleep / Dream frequencies"
+
+[[categories.frequencies]]
+hz = 0.5
+name = "deep_sleep"
+description = "Deep sleep (delta, restoration)"
+
+[[categories.frequencies]]
+hz = 1.0
+name = "dreamless"
+description = "Dreamless sleep (deep delta)"
+
+[[categories.frequencies]]
+hz = 2.0
+name = "healing_sleep"
+description = "Healing sleep (growth hormone)"
+
+[[categories.frequencies]]
+hz = 3.0
+name = "delta_sleep"
+description = "Delta sleep (cellular repair)"
+
+[[categories.frequencies]]
+hz = 4.0
+name = "theta_dream"
+description = "Theta dream state (REM transition)"
+
+[[categories.frequencies]]
+hz = 5.0
+name = "rem_sleep"
+description = "REM sleep (dreaming, memory)"
+
+[[categories.frequencies]]
+hz = 6.0
+name = "lucid_threshold"
+description = "Lucid dream threshold"
+
+[[categories.frequencies]]
+hz = 6.3
+name = "lucid_dreaming"
+description = "Lucid dreaming induction"
+
+[[categories.frequencies]]
+hz = 7.0
+name = "vivid_dreams"
+description = "Vivid dream enhancement"
+
+[[categories.frequencies]]
+hz = 7.83
+name = "earth_sleep"
+description = "Earth resonance sleep (Schumann)"
+
+[[categories.frequencies]]
+hz = 8.0
+name = "light_sleep"
+description = "Light sleep (alpha-theta border)"
+
+[[categories.frequencies]]
+hz = 10.0
+name = "sleep_onset"
+description = "Sleep onset (relaxation)"
+
+[[categories.frequencies]]
+hz = 174.0
+name = "insomnia_relief"
+description = "Insomnia relief (sedation)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "sleep_healing"
+description = "Sleep healing (tissue repair)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "nightmare_release"
+description = "Nightmare release (fear clearing)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "restful_sleep"
+description = "Restful sleep (harmony)"
+
+[[categories]]
+id = "cognitive"
+command = "Cognitive"
+dir_name = "cognitive"
+display_name = "Cognitive Enhancement Frequencies"
+file_prefix = "cognitive"
+cli_description = "Generate Cognitive Enhancement frequencies"
+
+[[categories.frequencies]]
+hz = 10.0
+name = "alert_relaxed"
+description = "Alert relaxation (alpha)"
+
+[[categories.frequencies]]
+hz = 12.0
+name = "learning"
+description = "Learning enhancement (low beta)"
+
+[[categories.frequencies]]
+hz = 14.0
+name = "focus"
+description = "Focus and concentration (beta)"
+
+[[categories.frequencies]]
+hz = 15.0
+name = "memory_retention"
+description = "Memory retention"
+
+[[categories.frequencies]]
+hz = 18.0
+name = "problem_solving"
+description = "Problem solving (mid beta)"
+
+[[categories.frequencies]]
+hz = 20.0
+name = "active_thinking"
+description = "Active thinking"
+
+[[categories.frequencies]]
+hz = 22.0
+name = "mental_clarity"
+description = "Mental clarity"
+
+[[categories.frequencies]]
+hz = 27.0
+name = "visualization"
+description = "Visualization enhancement"
+
+[[categories.frequencies]]
+hz = 32.0
+name = "cognitive_peak"
+description = "Cognitive peak performance"
+
+[[categories.frequencies]]
+hz = 40.0
+name = "gamma_cognition"
+description = "Gamma cognition (binding, insight)"
+
+[[categories.frequencies]]
+hz = 50.0
+name = "information_processing"
+description = "Information processing"
+
+[[categories.frequencies]]
+hz = 63.0
+name = "creativity_boost"
+description = "Creativity boost"
+
+[[categories.frequencies]]
+hz = 80.0
+name = "high_gamma"
+description = "High gamma (peak awareness)"
+
+[[categories.frequencies]]
+hz = 100.0
+name = "transcendent_insight"
+description = "Transcendent insight"
+
+[[categories.frequencies]]
+hz = 317.0
+name = "memory_consolidation"
+description = "Memory consolidation"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "dna_cognitive"
+description = "DNA-cognitive connection"
+
+[[categories]]
+id = "circadian"
+command = "Circadian"
+dir_name = "circadian"
+display_name = "Circadian Rhythm Frequencies"
+file_prefix = "circadian"
+cli_description = "Generate Circadian Rhythm frequencies"
+
+[[categories.frequencies]]
+hz = 0.5
+name = "midnight"
+description = "Midnight (deep rest, melatonin peak)"
+
+[[categories.frequencies]]
+hz = 2.0
+name = "late_night"
+description = "Late night (2-4am, deep healing)"
+
+[[categories.frequencies]]
+hz = 4.0
+name = "pre_dawn"
+description = "Pre-dawn (4-6am, transition)"
+
+[[categories.frequencies]]
+hz = 7.83
+name = "sunrise"
+description = "Sunrise (awakening, cortisol rise)"
+
+[[categories.frequencies]]
+hz = 10.0
+name = "morning"
+description = "Morning (8-10am, alert calm)"
+
+[[categories.frequencies]]
+hz = 14.0
+name = "late_morning"
+description = "Late morning (10am-noon, peak focus)"
+
+[[categories.frequencies]]
+hz = 18.0
+name = "noon"
+description = "Noon (12-2pm, high energy)"
+
+[[categories.frequencies]]
+hz = 14.0
+name = "afternoon"
+description = "Afternoon (2-4pm, sustained work)"
+
+[[categories.frequencies]]
+hz = 10.0
+name = "late_afternoon"
+description = "Late afternoon (4-6pm, wind down)"
+
+[[categories.frequencies]]
+hz = 8.0
+name = "evening"
+description = "Evening (6-8pm, relaxation)"
+
+[[categories.frequencies]]
+hz = 6.0
+name = "night"
+description = "Night (8-10pm, melatonin onset)"
+
+[[categories.frequencies]]
+hz = 4.0
+name = "late_evening"
+description = "Late evening (10pm-midnight, sleep prep)"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "solar_noon"
+description = "Solar noon (sun at zenith)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "lunar_midnight"
+description = "Lunar midnight (moon energy)"
+
+[[categories]]
+id = "ancient_civ"
+command = "AncientCiv"
+dir_name = "ancient_civ"
+display_name = "Ancient Civilization Frequencies"
+file_prefix = "ancient"
+cli_description = "Generate Lemurian / Atlantean frequencies"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "lemuria"
+description = "Lemuria (heart-centered civilization)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "lemurian_crystal"
+description = "Lemurian seed crystal activation"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "lemurian_heart"
+description = "Lemurian heart connection"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "mu"
+description = "Mu (motherland, Pacific)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "mt_shasta_lemuria"
+description = "Mount Shasta Lemurian portal"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "lemurian_wisdom"
+description = "Lemurian ancient wisdom"
+
+[[categories.frequencies]]
+hz = 288.0
+name = "atlantis"
+description = "Atlantis (technology + spirituality)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "atlantean_crystal"
+description = "Atlantean crystal technology"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "atlantean_temple"
+description = "Atlantean temple frequencies"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "poseidia"
+description = "Poseidia (Atlantean capital)"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "atlantean_grid"
+description = "Atlantean energy grid"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "hall_of_records"
+description = "Hall of Records (hidden knowledge)"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "hyperborea"
+description = "Hyperborea (northern paradise)"
+
+[[categories.frequencies]]
+hz = 555.0
+name = "shambhala"
+description = "Shambhala (hidden kingdom)"
+
+[[categories.frequencies]]
+hz = 666.0
+name = "agartha"
+description = "Agartha (inner earth civilization)"
+
+[[categories.frequencies]]
+hz = 777.0
+name = "avalon"
+description = "Avalon (Celtic otherworld)"
+
+[[categories.frequencies]]
+hz = 888.0
+name = "akashic_civilization"
+description = "Akashic civilization records"
+
+[[categories]]
+id = "divine_names"
+command = "DivineNames"
+dir_name = "divine_names"
+display_name = "Divine Name Frequencies"
+file_prefix = "divine"
+cli_description = "Generate Divine Names frequencies"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "ehyeh"
+description = "Ehyeh (I Am That I Am)"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "yah"
+description = "Yah (divine breath)"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "yhvh"
+description = "YHVH/Tetragrammaton (divine name)"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "el"
+description = "El (God, mighty one)"
+
+[[categories.frequencies]]
+hz = 555.0
+name = "elohim"
+description = "Elohim (Gods, creators)"
+
+[[categories.frequencies]]
+hz = 666.0
+name = "eloah"
+description = "Eloah (singular divine)"
+
+[[categories.frequencies]]
+hz = 777.0
+name = "tzabaoth"
+description = "Tzabaoth (Lord of Hosts)"
+
+[[categories.frequencies]]
+hz = 888.0
+name = "shaddai"
+description = "Shaddai (Almighty)"
+
+[[categories.frequencies]]
+hz = 999.0
+name = "adonai"
+description = "Adonai (Lord)"
+
+[[categories.frequencies]]
+hz = 72.0
+name = "shemhamphorash"
+description = "72 Names (Shemhamphorash complete)"
+
+[[categories.frequencies]]
+hz = 26.0
+name = "gematria_yhvh"
+description = "YHVH gematria value (10+5+6+5)"
+
+[[categories.frequencies]]
+hz = 86.0
+name = "gematria_elohim"
+description = "Elohim gematria value"
+
+[[categories.frequencies]]
+hz = 91.0
+name = "gematria_amen"
+description = "Amen gematria value"
+
+[[categories.frequencies]]
+hz = 314.0
+name = "gematria_shaddai"
+description = "Shaddai gematria value"
+
+[[categories.frequencies]]
+hz = 543.0
+name = "gematria_ehyeh"
+description = "Ehyeh Asher Ehyeh gematria"
+
+[[categories]]
+id = "kundalini"
+command = "Kundalini"
+dir_name = "kundalini"
+display_name = "Kundalini Frequencies"
+file_prefix = "kundalini"
+cli_description = "Generate Kundalini Awakening frequencies"
+
+[[categories.frequencies]]
+hz = 256.0
+name = "kundalini_dormant"
+description = "Dormant kundalini (base, coiled)"
+
+[[categories.frequencies]]
+hz = 288.0
+name = "kundalini_stirring"
+description = "Kundalini stirring (awakening begins)"
+
+[[categories.frequencies]]
+hz = 324.0
+name = "kundalini_rising"
+description = "Kundalini rising (ascending energy)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "root_activation"
+description = "Root chakra activation (Muladhara)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "sacral_activation"
+description = "Sacral activation (Svadhisthana)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "solar_activation"
+description = "Solar plexus activation (Manipura)"
+
+[[categories.frequencies]]
+hz = 594.0
+name = "heart_activation"
+description = "Heart activation (Anahata)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "throat_activation"
+description = "Throat activation (Vishuddha)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "third_eye_activation"
+description = "Third eye activation (Ajna)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "crown_activation"
+description = "Crown activation (Sahasrara)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "kundalini_union"
+description = "Kundalini-Shiva union (enlightenment)"
+
+[[categories.frequencies]]
+hz = 27.0
+name = "kundalini_breath"
+description = "Kundalini breath (pranayama)"
+
+[[categories.frequencies]]
+hz = 55.0
+name = "kundalini_heat"
+description = "Kundalini heat (tapas, inner fire)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "ida_nadi"
+description = "Ida nadi (lunar, feminine channel)"
+
+[[categories.frequencies]]
+hz = 144.0
+name = "pingala_nadi"
+description = "Pingala nadi (solar, masculine channel)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "sushumna_nadi"
+description = "Sushumna nadi (central channel)"
+
+[[categories]]
+id = "shadow"
+command = "Shadow"
+dir_name = "shadow"
+display_name = "Shadow Work Frequencies"
+file_prefix = "shadow"
+cli_description = "Generate Shadow Work frequencies"
+
+[[categories.frequencies]]
+hz = 174.0
+name = "shadow_awareness"
+description = "Shadow awareness (recognition)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "shadow_acceptance"
+description = "Shadow acceptance (embracing)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "shadow_integration"
+description = "Shadow integration (wholeness)"
+
+[[categories.frequencies]]
+hz = 417.0
+name = "inner_child"
+description = "Inner child healing"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "self_love_shadow"
+description = "Self-love (shadow transformed)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "projection_clearing"
+description = "Projection clearing (owning shadow)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "repression_release"
+description = "Repression release (hidden aspects)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "persona_shadow"
+description = "Persona-shadow balance"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "golden_shadow"
+description = "Golden shadow (hidden gifts)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "trigger_healing"
+description = "Trigger healing (reaction patterns)"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "belief_clearing"
+description = "Limiting belief clearing"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "wound_healing"
+description = "Core wound healing"
+
+[[categories.frequencies]]
+hz = 444.0
+name = "self_sabotage"
+description = "Self-sabotage clearing"
+
+[[categories.frequencies]]
+hz = 140.25
+name = "underworld_journey"
+description = "Underworld journey (deep shadow)"
+
+[[categories.frequencies]]
+hz = 4.0
+name = "theta_shadow"
+description = "Theta shadow access (subconscious)"
+
+[[categories]]
+id = "polarity"
+command = "Polarity"
+dir_name = "polarity"
+display_name = "Polarity Balance Frequencies"
+file_prefix = "polarity"
+cli_description = "Generate Polarity frequencies"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "divine_masculine"
+description = "Divine masculine (sun, action, logic)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "divine_feminine"
+description = "Divine feminine (moon, intuition, receptive)"
+
+[[categories.frequencies]]
+hz = 432.0
+name = "sacred_union"
+description = "Sacred union (hieros gamos)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "warrior_energy"
+description = "Warrior energy (Mars, courage)"
+
+[[categories.frequencies]]
+hz = 221.23
+name = "goddess_energy"
+description = "Goddess energy (Venus, love)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "heart_balance"
+description = "Heart balance (masculine-feminine)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "anima"
+description = "Anima (inner feminine in men)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "animus"
+description = "Animus (inner masculine in women)"
+
+[[categories.frequencies]]
+hz = 111.0
+name = "yang_activation"
+description = "Yang activation (assertive, outward)"
+
+[[categories.frequencies]]
+hz = 222.0
+name = "yin_activation"
+description = "Yin activation (receptive, inward)"
+
+[[categories.frequencies]]
+hz = 333.0
+name = "polarity_integration"
+description = "Polarity integration (wholeness)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "shakti"
+description = "Shakti (feminine creative power)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "shiva_energy"
+description = "Shiva (masculine consciousness)"
+
+[[categories.frequencies]]
+hz = 963.0
+name = "androgyne"
+description = "Androgyne (unified being)"
+
+[[categories]]
+id = "nature"
+command = "Nature"
+dir_name = "nature"
+display_name = "Nature Frequencies"
+file_prefix = "nature"
+cli_description = "Generate Nature / Weather frequencies"
+
+[[categories.frequencies]]
+hz = 7.83
+name = "earth_resonance"
+description = "Earth resonance (Schumann)"
+
+[[categories.frequencies]]
+hz = 10.0
+name = "alpha_nature"
+description = "Natural alpha (forest, meadow)"
+
+[[categories.frequencies]]
+hz = 136.1
+name = "om_earth"
+description = "Om/Earth year tone"
+
+[[categories.frequencies]]
+hz = 194.18
+name = "earth_day"
+description = "Earth day frequency"
+
+[[categories.frequencies]]
+hz = 126.22
+name = "sun_frequency"
+description = "Sun frequency (warmth, vitality)"
+
+[[categories.frequencies]]
+hz = 210.42
+name = "moon_frequency"
+description = "Moon frequency (tides, cycles)"
+
+[[categories.frequencies]]
+hz = 172.06
+name = "rain"
+description = "Rain frequency (cleansing, renewal)"
+
+[[categories.frequencies]]
+hz = 183.58
+name = "thunder"
+description = "Thunder frequency (power, clearing)"
+
+[[categories.frequencies]]
+hz = 211.44
+name = "ocean"
+description = "Ocean frequency (vastness, subconscious)"
+
+[[categories.frequencies]]
+hz = 144.72
+name = "wind"
+description = "Wind frequency (change, breath)"
+
+[[categories.frequencies]]
+hz = 285.0
+name = "forest"
+description = "Forest frequency (grounding, oxygen)"
+
+[[categories.frequencies]]
+hz = 396.0
+name = "mountain"
+description = "Mountain frequency (stability, elevation)"
+
+[[categories.frequencies]]
+hz = 528.0
+name = "waterfall"
+description = "Waterfall (negative ions, refreshing)"
+
+[[categories.frequencies]]
+hz = 639.0
+name = "river"
+description = "River frequency (flow, journey)"
+
+[[categories.frequencies]]
+hz = 741.0
+name = "desert"
+description = "Desert frequency (clarity, essence)"
+
+[[categories.frequencies]]
+hz = 852.0
+name = "aurora"
+description = "Aurora/Northern lights (cosmic connection)"
